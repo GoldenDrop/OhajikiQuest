@@ -11,12 +11,11 @@ public class Catapult : MonoBehaviour {
 	void Start () 
     {
         CreateBall();
-        ChangeFixedCatapult();
 	}
 	
 	void Update () 
     {
-        if (this.isFixed) // カタパルトが固定されているなら
+        if (!this.isFixed) // カタパルトが固定さていないなら
         {
             MoveCatapult();
         }
