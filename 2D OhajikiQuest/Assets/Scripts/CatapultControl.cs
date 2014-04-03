@@ -13,6 +13,12 @@ public class CatapultControl : MonoBehaviour {
     bool isMovingBall    = false;
     bool isPulledBall    = false;
 
+    Vector2 firstPoint;
+    Vector2 mousePoint;
+    Vector2 deltaPoint;
+
+
+
     // フェイズ 0:待機 1:勇者 2:敵 
     int phase = 0;
     void Start()
@@ -63,6 +69,8 @@ public class CatapultControl : MonoBehaviour {
             if (Input.GetMouseButtonDown(0)) // 左クリック開始
             {
                 Debug.Log("Mouse Left Button Down Start");
+                this.firstPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Debug.Log("firstPoint(" + this.firstPoint.x + ", " + this.firstPoint.y + ")");
                 this.isPulledBall = true;
             }
         }
@@ -71,15 +79,21 @@ public class CatapultControl : MonoBehaviour {
             if (Input.GetMouseButton(0)) // 左クリック中
             {
                 Debug.Log("Mouse Left Button Down");
-
+                this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                this.deltaPoint = this.firstPoint - this.mousePoint;
+                Debug.Log("mousePoint(" + this.mousePoint.x + ", " + this.mousePoint.y + ")");
+                Debug.Log("deltaPoint(" + this.deltaPoint.x + ", " + this.deltaPoint.y + ")");
+                this.ball.SendMessage("Turn", this.deltaPoint);
             }
 
             if (Input.GetMouseButtonUp(0)) // 左クリック終了
             {
                 Debug.Log("Mouse Left Button Up");
+                this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                this.deltaPoint = this.firstPoint - this.mousePoint;
+                this.ball.SendMessage("AddForceToBall", this.deltaPoint);
                 this.isPulledBall = false;
                 this.isMovingBall = true;
-                MoveBall();
             }
         }
     }
@@ -123,13 +137,15 @@ public class CatapultControl : MonoBehaviour {
         this.ball.transform.parent = gameObject.transform;
     }
 
-    void MoveBall()
+    void InitializationCatapult()
     {
-        Debug.Log("Move Ball Start");
+        Debug.Log("Initialization Catapult");
         // デバッグ用　ここから
         this.isMovingBall = false;
         ChangeFixedCatapult();
         // デバッグ用　ここまで
-
     }
+
+
+    
 }
