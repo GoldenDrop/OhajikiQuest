@@ -13,6 +13,13 @@ public class CatapultControl : MonoBehaviour {
     bool isMovingBall    = false;
     bool isPulledBall    = false;
 
+    Vector2 firstPoint;
+    Vector2 mousePoint;
+    Vector2 deltaPoint;
+
+    Quaternion rotation;
+
+
     // フェイズ 0:待機 1:勇者 2:敵 
     int phase = 0;
     void Start()
@@ -63,6 +70,8 @@ public class CatapultControl : MonoBehaviour {
             if (Input.GetMouseButtonDown(0)) // 左クリック開始
             {
                 Debug.Log("Mouse Left Button Down Start");
+                this.firstPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Debug.Log("firstPoint(" + this.firstPoint.x + ", " + this.firstPoint.y + ")");
                 this.isPulledBall = true;
             }
         }
@@ -71,7 +80,11 @@ public class CatapultControl : MonoBehaviour {
             if (Input.GetMouseButton(0)) // 左クリック中
             {
                 Debug.Log("Mouse Left Button Down");
-
+                this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                this.deltaPoint = this.firstPoint - this.mousePoint;
+                Debug.Log("mousePoint(" + this.mousePoint.x + ", " + this.mousePoint.y + ")");
+                Debug.Log("deltaPoint(" + this.deltaPoint.x + ", " + this.deltaPoint.y + ")");
+                TurnBall();
             }
 
             if (Input.GetMouseButtonUp(0)) // 左クリック終了
@@ -131,5 +144,13 @@ public class CatapultControl : MonoBehaviour {
         ChangeFixedCatapult();
         // デバッグ用　ここまで
 
+    }
+
+    void TurnBall()
+    {
+        float angle = Mathf.Atan2(this.deltaPoint.x, this.deltaPoint.y) * Mathf.Rad2Deg * -1;
+        Debug.Log("angle = " + angle + "°");
+        this.rotation.eulerAngles = new Vector3(0, 0, angle);
+        this.ball.transform.rotation = rotation;
     }
 }
