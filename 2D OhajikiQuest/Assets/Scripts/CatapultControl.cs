@@ -140,16 +140,8 @@ public class CatapultControl : MonoBehaviour {
     void InitializationCatapult()
     {
         Debug.Log("Initialization Catapult");
-        DestroyBall();
         CreateBall();
         this.isMovingBall = false;
         ChangeFixedCatapult();
     }
-
-    void DestroyBall()
-    {
-        Destroy(this.ball.gameObject);
-    }
-
-    
 }
