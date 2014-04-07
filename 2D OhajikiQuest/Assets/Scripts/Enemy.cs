@@ -9,9 +9,10 @@ public class Enemy : MonoBehaviour {
     public float hpBarH = 0.10f;
     public float xOffset = 0.03f;
     public float yOffset = 0.05f;
-
+    int hp;
 	void Start () 
     {
+        this.hp = maxHP;
         CreateHPBar();
 	}
 	
@@ -35,6 +36,30 @@ public class Enemy : MonoBehaviour {
             Vector2 nextPoint = new Vector2(col * (this.hpBarW + this.xOffset), row * (this.hpBarH + this.yOffset));
             GameObject hp = Instantiate(hpBarPrefab, firstPoint + nextPoint, Quaternion.identity) as GameObject;
             hp.transform.parent = gameObject.transform;
+        }
+    }
+
+    void ReceivedDamage()
+    {
+        if (this.hp > 0)
+        {
+            Destroy(transform.GetChild(this.hp - 1).gameObject);
+            --hp;
+        }
+        
+        if (this.hp == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D hit)
+    {
+        switch (hit.gameObject.tag)
+        {
+            case "Ball":
+                ReceivedDamage();
+                break;
         }
     }
 }
