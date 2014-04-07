@@ -19,4 +19,13 @@ public class PhaseControl : MonoBehaviour {
         int phaseNumber = this.phase;
         return phaseNumber;
     }
+
+    void Update()
+    {
+        // デバッグ用　Phaseを1に戻す
+        if (this.phase == 2)
+        {
+            this.phase = 1;
+        }
+    }
 }
