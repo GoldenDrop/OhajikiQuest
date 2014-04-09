@@ -19,9 +19,6 @@ public class CatapultControl : MonoBehaviour {
 
     Vector2 cutpultFirstPosition;
 
-
-
-
     // フェイズ 0:待機 1:勇者 2:敵 
     int phase = 0;
     void Start()
