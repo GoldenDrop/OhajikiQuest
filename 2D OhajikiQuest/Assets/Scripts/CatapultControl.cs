@@ -6,9 +6,9 @@ public class CatapultControl : MonoBehaviour {
     public float speed = 5.0f;
     public GameObject ball_P;
     GameObject ball;
-    GameObject phaseControl;
     GameObject fixedIcon;
-    PhaseControl phaseComponent;
+    GetPhase getPhase;
+
     bool isFixedCatapult = false;
     bool isMovingBall    = false;
     bool isPulledBall    = false;
@@ -17,20 +17,24 @@ public class CatapultControl : MonoBehaviour {
     Vector2 mousePoint;
     Vector2 deltaPoint;
 
+    Vector2 cutpultFirstPosition;
+
+
 
 
     // フェイズ 0:待機 1:勇者 2:敵 
     int phase = 0;
     void Start()
     {
-        this.phaseControl = GameObject.FindWithTag("PhaseControl");
-        this.fixedIcon    = GameObject.FindWithTag("FixedIcon");
+        this.cutpultFirstPosition = transform.position; 
+        this.getPhase  = gameObject.GetComponent<GetPhase>();
+        this.fixedIcon = GameObject.FindWithTag("FixedIcon");
         CreateBall();
     }
 
     void Update()
     {
-        GetPhase();
+        this.phase = this.getPhase.GetPhaseNumber();
         if (this.phase == 1) // 勇者フェイズ
         {
             if (!this.isMovingBall) // Ballが動いてないなら
@@ -54,12 +58,6 @@ public class CatapultControl : MonoBehaviour {
                 }
             }
         }
-    }
-
-    void GetPhase()
-    {
-        this.phaseComponent = this.phaseControl.GetComponent<PhaseControl>();
-        this.phase = this.phaseComponent.GetPhase();
     }
 
     void PullBall()
@@ -140,6 +138,7 @@ public class CatapultControl : MonoBehaviour {
     void InitializationCatapult()
     {
         Debug.Log("Initialization Catapult");
+        transform.localPosition = this.cutpultFirstPosition;
         CreateBall();
         this.isMovingBall = false;
         ChangeFixedCatapult();
