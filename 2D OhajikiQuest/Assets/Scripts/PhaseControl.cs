@@ -3,15 +3,37 @@ using System.Collections;
 
 public class PhaseControl : MonoBehaviour {
     int phase = 0;
+    float enemyTime;
+    float enemyTimeInterval = 2.5f;
+    GameObject catapult;
+
+    // それぞれのフェイズ回数
+    int playerPhaseNumber = 0;
+    int enemyPhaseNumber = 0;
+
 
     void Start()
     {
+        this.catapult = GameObject.FindWithTag("Catapult");
         this.phase = 1;
+        this.playerPhaseNumber++;
+        this.enemyTime = this.enemyTimeInterval;
     }
 
     public void SetPhase(int p)
     {
         this.phase = p;
+        switch (this.phase)
+        {
+            case 1 :
+                this.playerPhaseNumber++;
+                Debug.Log("playerPhaseNumber ++");
+                break;
+            case 2:
+                this.enemyPhaseNumber++;
+                Debug.Log("enemyPhaseNumber ++ : " + this.enemyPhaseNumber);
+                break;
+        }
     }
 
     public int GetPhase()
@@ -20,12 +42,29 @@ public class PhaseControl : MonoBehaviour {
         return phaseNumber;
     }
 
+    public int GetPlayerPhaseNumber()
+    {
+        int playerNumber = this.playerPhaseNumber;
+        return playerNumber;
+    }
+
+    public int GetEnemyPhaseNumber()
+    {
+        int enemyNumber = this.enemyPhaseNumber;
+        return enemyNumber;
+    }
+
     void Update()
     {
-        // デバッグ用　Phaseを1に戻す
         if (this.phase == 2)
         {
-            this.phase = 1;
+            this.enemyTime -= Time.deltaTime;
+            if (this.enemyTime < 0)
+            {
+                this.phase = 1;
+                this.catapult.SendMessage("InitializedCatapult");
+                this.enemyTime = this.enemyTimeInterval;
+            }
         }
     }
 }

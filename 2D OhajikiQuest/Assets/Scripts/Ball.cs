@@ -10,6 +10,7 @@ public class Ball : MonoBehaviour {
     float moveTimer;
     float moveInterval = 3.0f;
 
+
 	void Start () 
     {
         this.catapult     = GameObject.FindWithTag("Catapult");
@@ -33,7 +34,6 @@ public class Ball : MonoBehaviour {
                 gameObject.rigidbody2D.fixedAngle = false;
                 Destroy(gameObject);
                 this.isMoving = false;
-                this.catapult.SendMessage("InitializationCatapult");
                 this.phaseControl.SendMessage("SetPhase", 2);
                 this.moveTimer = this.moveInterval;
             }
