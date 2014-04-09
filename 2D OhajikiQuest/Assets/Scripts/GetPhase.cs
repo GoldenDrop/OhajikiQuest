@@ -15,7 +15,7 @@ public class GetPhase : MonoBehaviour {
     {
         this.phaseComponent = this.phaseControl.GetComponent<PhaseControl>();
         int phaseNumber = this.phaseComponent.GetPhase();
-        Debug.Log("Get Phase : " + phaseNumber);
+        //Debug.Log("Get Phase : " + phaseNumber);
         return phaseNumber;
     }
 }

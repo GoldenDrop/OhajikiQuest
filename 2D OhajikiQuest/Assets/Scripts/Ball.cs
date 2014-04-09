@@ -33,7 +33,6 @@ public class Ball : MonoBehaviour {
                 gameObject.rigidbody2D.fixedAngle = false;
                 Destroy(gameObject);
                 this.isMoving = false;
-                this.catapult.SendMessage("InitializationCatapult");
                 this.phaseControl.SendMessage("SetPhase", 2);
                 this.moveTimer = this.moveInterval;
             }

@@ -135,7 +135,7 @@ public class CatapultControl : MonoBehaviour {
         this.ball.transform.parent = gameObject.transform;
     }
 
-    void InitializationCatapult()
+    void InitializedCatapult()
     {
         Debug.Log("Initialization Catapult");
         transform.localPosition = this.cutpultFirstPosition;
