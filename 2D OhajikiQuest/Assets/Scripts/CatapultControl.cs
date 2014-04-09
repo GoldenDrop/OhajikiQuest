@@ -34,7 +34,7 @@ public class CatapultControl : MonoBehaviour {
 
     void Update()
     {
-        this.phase = this.getPhase.GetPhaseNumber();
+        this.phase = this.getPhase.GetNowPhase();
         if (this.phase == 1) // 勇者フェイズ
         {
             if (!this.isMovingBall) // Ballが動いてないなら

@@ -10,6 +10,7 @@ public class Ball : MonoBehaviour {
     float moveTimer;
     float moveInterval = 3.0f;
 
+
 	void Start () 
     {
         this.catapult     = GameObject.FindWithTag("Catapult");

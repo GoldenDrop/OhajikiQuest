@@ -7,22 +7,51 @@ public class PhaseControl : MonoBehaviour {
     float enemyTimeInterval = 2.5f;
     GameObject catapult;
 
+    // それぞれのフェイズ回数
+    int playerPhaseNumber = 0;
+    int enemyPhaseNumber = 0;
+
+
     void Start()
     {
         this.catapult = GameObject.FindWithTag("Catapult");
         this.phase = 1;
+        this.playerPhaseNumber++;
         this.enemyTime = this.enemyTimeInterval;
     }
 
     public void SetPhase(int p)
     {
         this.phase = p;
+        switch (this.phase)
+        {
+            case 1 :
+                this.playerPhaseNumber++;
+                Debug.Log("playerPhaseNumber ++");
+                break;
+            case 2:
+                this.enemyPhaseNumber++;
+                Debug.Log("enemyPhaseNumber ++ : " + this.enemyPhaseNumber);
+                break;
+        }
     }
 
     public int GetPhase()
     {
         int phaseNumber = this.phase;
         return phaseNumber;
+    }
+
+    public int GetPlayerPhaseNumber()
+    {
+        int playerNumber = this.playerPhaseNumber;
+        return playerNumber;
+    }
+
+    public int GetEnemyPhaseNumber()
+    {
+        int enemyNumber = this.enemyPhaseNumber;
+        return enemyNumber;
     }
 
     void Update()
