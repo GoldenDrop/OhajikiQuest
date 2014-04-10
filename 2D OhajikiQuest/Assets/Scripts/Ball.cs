@@ -11,6 +11,8 @@ public class Ball : MonoBehaviour {
     float moveInterval = 3.0f;
     float angle;
     public float limitAngle = 30.0f;
+    float minAngle;
+    float maxAngle;
 
 
 	void Start () 
@@ -18,6 +20,8 @@ public class Ball : MonoBehaviour {
         this.catapult     = GameObject.FindWithTag("Catapult");
         this.phaseControl = GameObject.FindWithTag("PhaseControl");
         this.moveTimer    = this.moveInterval;
+        this.minAngle = -90 + limitAngle;
+        this.maxAngle =  90 - limitAngle;
 	}
 	
 	void Update () 
@@ -45,16 +49,15 @@ public class Ball : MonoBehaviour {
     void GetAngle(Vector2 delta)
     {
         this.angle = Mathf.Atan2(delta.x, delta.y) * Mathf.Rad2Deg * -1;
-        float minAngle = -90 + limitAngle;
-        float maxAngle =  90 - limitAngle;
 
-        if (this.angle < minAngle)
+        // 角度制限
+        if (this.angle < this.minAngle)
         {
-            this.angle = minAngle;
+            this.angle = this.minAngle;
         }
-        else if (this.angle > maxAngle)
+        else if (this.angle > this.maxAngle)
         {
-            this.angle = maxAngle;
+            this.angle = this.maxAngle;
         }
         Debug.Log("(GetAngle) angle = " + this.angle + "°");
     }
@@ -68,9 +71,22 @@ public class Ball : MonoBehaviour {
    
     void AddForceToBall(Vector2 delta)
     {
+        Vector2 pull = delta.normalized;
+        // 角度制限
+        if (this.angle == this.minAngle)
+        {
+            Debug.Log("(AddForceToBall) MinLimitAngle");
+            pull = new Vector2(Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
+        }
+        else if (this.angle == this.maxAngle)
+        {
+            Debug.Log("(AddForceToBall) MinLimitAngle");
+            pull = new Vector2(-Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
+        }
+        Debug.Log("(AddForceToBall) pull(" + pull.x + ", " + pull.y + ")" + pull.magnitude);
         float vectorLength = delta.magnitude;
         Debug.Log("(AddForceToBall) delta's VectorLength : " + vectorLength);
-        gameObject.rigidbody2D.AddForce(delta.normalized * vectorLength * FORCE);
+        gameObject.rigidbody2D.AddForce(pull * FORCE);// * vectorLength * FORCE);
         this.isMoving = true;
     }
 }
