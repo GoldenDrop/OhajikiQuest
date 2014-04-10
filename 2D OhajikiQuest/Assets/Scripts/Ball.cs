@@ -9,6 +9,8 @@ public class Ball : MonoBehaviour {
     bool isMoving = false;
     float moveTimer;
     float moveInterval = 3.0f;
+    float angle;
+    public float limitAngle = 30.0f;
 
 
 	void Start () 
@@ -40,19 +42,35 @@ public class Ball : MonoBehaviour {
         }
 	}
 
-    void Turn(Vector2 delta)
+    void GetAngle(Vector2 delta)
     {
-        float angle = Mathf.Atan2(delta.x, delta.y) * Mathf.Rad2Deg * -1;
-        Debug.Log("angle = " + angle + "°");
-        this.rotation.eulerAngles = new Vector3(0, 0, angle);
+        this.angle = Mathf.Atan2(delta.x, delta.y) * Mathf.Rad2Deg * -1;
+        float minAngle = -90 + limitAngle;
+        float maxAngle =  90 - limitAngle;
+
+        if (this.angle < minAngle)
+        {
+            this.angle = minAngle;
+        }
+        else if (this.angle > maxAngle)
+        {
+            this.angle = maxAngle;
+        }
+        Debug.Log("(GetAngle) angle = " + this.angle + "°");
+    }
+
+    void Turn()
+    {
+        this.rotation.eulerAngles = new Vector3(0, 0, this.angle);
         transform.rotation = rotation;
     }
 
    
     void AddForceToBall(Vector2 delta)
     {
-        float multiple = Mathf.Sqrt(delta.x * delta.x + delta.y * delta.y);
-        gameObject.rigidbody2D.AddForce(delta * FORCE);
+        float vectorLength = delta.magnitude;
+        Debug.Log("(AddForceToBall) delta's VectorLength : " + vectorLength);
+        gameObject.rigidbody2D.AddForce(delta.normalized * vectorLength * FORCE);
         this.isMoving = true;
     }
 }

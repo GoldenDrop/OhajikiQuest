@@ -78,7 +78,8 @@ public class CatapultControl : MonoBehaviour {
                 this.deltaPoint = this.firstPoint - this.mousePoint;
                 Debug.Log("mousePoint(" + this.mousePoint.x + ", " + this.mousePoint.y + ")");
                 Debug.Log("deltaPoint(" + this.deltaPoint.x + ", " + this.deltaPoint.y + ")");
-                this.ball.SendMessage("Turn", this.deltaPoint);
+                this.ball.SendMessage("GetAngle", this.deltaPoint);   // 先に角度を計算する
+                this.ball.SendMessage("Turn");
             }
 
             if (Input.GetMouseButtonUp(0)) // 左クリック終了
@@ -86,6 +87,7 @@ public class CatapultControl : MonoBehaviour {
                 Debug.Log("Mouse Left Button Up");
                 this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 this.deltaPoint = this.firstPoint - this.mousePoint;
+                this.ball.SendMessage("GetAngle", this.deltaPoint);   // 先に角度を計算する
                 this.ball.SendMessage("AddForceToBall", this.deltaPoint);
                 this.isPulledBall = false;
                 this.isMovingBall = true;
