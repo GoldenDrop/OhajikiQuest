@@ -13,7 +13,8 @@ public class Ball : MonoBehaviour {
     public float limitAngle = 30.0f;
     float minAngle;
     float maxAngle;
-
+    public float minLength = 0.5f;
+    public float maxLength = 2.0f;
 
 	void Start () 
     {
@@ -71,22 +72,36 @@ public class Ball : MonoBehaviour {
    
     void AddForceToBall(Vector2 delta)
     {
-        Vector2 pull = delta.normalized;
+        Vector2 pull = delta.normalized; // ベクトルの長さを1にする
+
         // 角度制限
         if (this.angle == this.minAngle)
         {
-            Debug.Log("(AddForceToBall) MinLimitAngle");
+            // 与えるベクトルをminAngleのベクトルに変更する
             pull = new Vector2(Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
         }
         else if (this.angle == this.maxAngle)
         {
-            Debug.Log("(AddForceToBall) MinLimitAngle");
+            // 与えるベクトルをmaxAngleのベクトルに変更する
             pull = new Vector2(-Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
         }
-        Debug.Log("(AddForceToBall) pull(" + pull.x + ", " + pull.y + ")" + pull.magnitude);
-        float vectorLength = delta.magnitude;
+
+        float vectorLength = delta.magnitude; // 引っ張りの長さを取得
         Debug.Log("(AddForceToBall) delta's VectorLength : " + vectorLength);
-        gameObject.rigidbody2D.AddForce(pull * FORCE);// * vectorLength * FORCE);
+
+        // 長さ制限
+        if (vectorLength < this.minLength)
+        {
+            Debug.Log("(AddForceToBall) Min Length");
+            vectorLength = this.minLength;
+        }
+        else if (vectorLength > this.maxLength)
+        {
+            Debug.Log("(AddForceToBall) Max Length");
+            vectorLength = this.maxLength;
+        }
+
+        gameObject.rigidbody2D.AddForce(pull * vectorLength * FORCE);
         this.isMoving = true;
     }
 }
