@@ -20,7 +20,7 @@ public class EnemyMove : MonoBehaviour {
         if (this.phase == 2) // 敵フェイズ
         {
             this.phaseNumber = this.getPhase.GetPhaseNumber("Enemy");
-            Debug.Log("GetEnemyPhaseNumber : " + this.phaseNumber);
+            //Debug.Log("GetEnemyPhaseNumber : " + this.phaseNumber);
             if (this.phaseNumber % this.moveInterval == 0)
             {
                 Move();

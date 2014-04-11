@@ -10,8 +10,12 @@ public class Enemy : MonoBehaviour {
     public float xOffset = 0.03f;
     public float yOffset = 0.05f;
     int hp;
+
+    GameObject gameController;
+
 	void Start () 
     {
+        this.gameController = GameObject.FindWithTag("GameController");
         this.hp = maxHP;
         CreateHPBar();
 	}
@@ -50,6 +54,7 @@ public class Enemy : MonoBehaviour {
         if (this.hp == 0)
         {
             Destroy(gameObject);
+            this.gameController.SendMessage("UpdateEnemyCount");
         }
     }
 
