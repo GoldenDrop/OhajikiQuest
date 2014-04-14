@@ -32,6 +32,7 @@ public class GUI : MonoBehaviour {
         }
     }
 
+    // 座標変換
     Vector2 GetViewportPoint(Vector2 position)
     {
         //Debug.Log("WorldPoint : " + position);
