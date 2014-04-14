@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour {
 
     void CreateHPBar()
     {
-        Vector2 firstPoint = new Vector2(0 - (this.hpBarW * 2 + this.xOffset * 2), this.yOffset + 0.3f);
+        Vector2 firstPoint = new Vector2(transform.position.x - (this.hpBarW * 2 + this.xOffset * 2), 0.4f + transform.position.y);//0.3f);
 
         for (int i = 0; i < this.maxHP; i++)
         {

@@ -14,7 +14,7 @@ public class GetEnemyCount : MonoBehaviour {
 
     void SendToGameController()
     {
-        int enemyCount = this.enemyBox.GetChildCount();
+        int enemyCount = this.enemyBox.childCount;
         Debug.Log("<SendToGameController> Enemy Count : " + enemyCount);
         this.gameController.SendMessage("GetEnemyCount", enemyCount);
 

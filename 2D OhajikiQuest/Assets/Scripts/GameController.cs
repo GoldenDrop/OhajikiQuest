@@ -4,7 +4,13 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
     int enemyCount;
+    GameObject stageController;
 
+
+    void Start()
+    {
+        this.stageController = GameObject.FindWithTag("StageController");
+    }
 
     void GetEnemyCount(int count)
     {
@@ -17,13 +23,14 @@ public class GameController : MonoBehaviour {
         Debug.Log("<UpdateEnemyCount> Enemy Count : " + this.enemyCount);
         if (this.enemyCount == 0)
         {
-            Win();
+            GoNextStage();
         }
     }
 
-    void Win()
+    void GoNextStage()
     {
-        Debug.Log("YOU WIN");
+        Debug.Log("GoNextStage");
+        this.stageController.SendMessage("NextStage");
     }
 
     void GameOver()
