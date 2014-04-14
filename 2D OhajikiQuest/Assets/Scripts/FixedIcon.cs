@@ -13,7 +13,9 @@ public class FixedIcon : MonoBehaviour {
 
     void CreateText()
     {
-        this.fiexdIconText = Instantiate(this.fiexdIconText_P, new Vector2(0.8f, 0.07f), Quaternion.identity) as GUIText;
+        //Vector2(0.8f, 0.07f)
+        Vector2 textPoint = GetTextPoint();
+        this.fiexdIconText = Instantiate(this.fiexdIconText_P, textPoint, Quaternion.identity) as GUIText;
         this.fiexdIconText.text = "Free";
     }
     void ChangeText()
@@ -27,5 +29,11 @@ public class FixedIcon : MonoBehaviour {
                 this.fiexdIconText.text = "Fixed";
                 break;
         } 
+    }
+
+    Vector2 GetTextPoint()
+    {
+        Vector2 point = camera.WorldToScreenPoint(transform.position);
+        return point;
     }
 }

@@ -6,7 +6,7 @@ public class CatapultControl : MonoBehaviour {
     public float speed = 5.0f;
     public GameObject ball_P;
     GameObject ball;
-    GameObject fixedIcon;
+    GameObject mainCamera;
     GetPhase getPhase;
 
     bool isFixedCatapult = false;
@@ -25,7 +25,7 @@ public class CatapultControl : MonoBehaviour {
     {
         this.cutpultFirstPosition = transform.position; 
         this.getPhase  = gameObject.GetComponent<GetPhase>();
-        this.fixedIcon = GameObject.FindWithTag("FixedIcon");
+        this.mainCamera = GameObject.FindWithTag("MainCamera");
         CreateBall();
     }
 
@@ -124,13 +124,13 @@ public class CatapultControl : MonoBehaviour {
         {
             this.isFixedCatapult = true;
         }
-        this.fixedIcon.SendMessage("ChangeText");
+        this.mainCamera.SendMessage("FixedIconChangeText");
     }
 
     void CreateBall()
     {
         // 子としてBall生成
-        this.ball = Instantiate(this.ball_P, new Vector2(0, -2.7f), Quaternion.identity) as GameObject;
+        this.ball = Instantiate(this.ball_P, new Vector2(0, -3.2f), Quaternion.identity) as GameObject;
         this.ball.transform.parent = gameObject.transform;
     }
 
