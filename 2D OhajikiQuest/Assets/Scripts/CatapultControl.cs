@@ -130,7 +130,7 @@ public class CatapultControl : MonoBehaviour {
     void CreateBall()
     {
         // 子としてBall生成
-        this.ball = Instantiate(this.ball_P, new Vector2(0, -2.5f), Quaternion.identity) as GameObject;
+        this.ball = Instantiate(this.ball_P, new Vector2(0, -2.7f), Quaternion.identity) as GameObject;
         this.ball.transform.parent = gameObject.transform;
     }
 
