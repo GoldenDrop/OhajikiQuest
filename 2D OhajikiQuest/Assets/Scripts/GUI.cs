@@ -6,6 +6,11 @@ public class GUI : MonoBehaviour {
     public GUIText fiexdIconText_P;
     GUIText fixedIconText;
     Transform fixedIcon;
+    GameObject nextButton;
+    GameObject retryButton;
+    GameObject resultButton;
+    GameObject titleButton;
+
 
     void Start()
     {
@@ -31,6 +36,7 @@ public class GUI : MonoBehaviour {
                 break;
         }
     }
+
 
     // 座標変換
     Vector2 GetViewportPoint(Vector2 position)
