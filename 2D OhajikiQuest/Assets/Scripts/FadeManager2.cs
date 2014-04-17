@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FadeManager : MonoBehaviour {
-    public GUITexture fadePrefab;   // テクスチャのPrefab
-    GUITexture fade;
+public class FadeManager2 : MonoBehaviour {
+    GameObject blackoutCurtainObject;   // 暗幕オブジェクト
+    Transform blackoutCurtain;
     float fadeSpeed = 0.5f;          // フェイドの速さ
-    float opacity = 0.0f;           // 不透明度
+    float opacity = 1.0f;           // 不透明度
     float maxOpacity = 1.0f;        // 最大不透明度
     Color fadeColor;                // テクスチャの色
     bool isFadeIn = false;          // フェードインのフラグ
@@ -13,8 +13,10 @@ public class FadeManager : MonoBehaviour {
 
 	void Start () 
     {
-
-        CreateFade();
+        this.blackoutCurtainObject = GameObject.FindWithTag("BlackoutCurtain");
+        this.blackoutCurtain = this.blackoutCurtainObject.transform.Find("BlackoutCurtain");
+        this.fadeColor = Color.black;
+        OnFadeInFlag(0.8f);
 	}
 	
 	void Update () 
@@ -30,21 +32,7 @@ public class FadeManager : MonoBehaviour {
         }
 	}
 
-    void CreateFade()
-    {
-        // テクスチャの色を黒,透明にする
-        this.fadeColor = Color.black;
-        this.fadeColor.a = this.opacity;
-
-        // テクスチャの生成　大きさは画面サイズにする
-        this.fade = Instantiate(fadePrefab, Vector2.zero, Quaternion.identity) as GUITexture;
-        this.fade.transform.position = Vector3.zero;
-        this.fade.transform.localScale = Vector3.zero;
-        this.fade.guiTexture.pixelInset = new Rect(Screen.width, Screen.height, -Screen.width, -Screen.height);
-
-        // 色を反映させる
-        this.fade.guiTexture.color = this.fadeColor;
-    }
+    
 
     void OnFadeInFlag(float speed)
     {
@@ -63,7 +51,7 @@ public class FadeManager : MonoBehaviour {
         // 時間が経過する度に不透明度を下げる
         this.opacity -= this.fadeSpeed * Time.deltaTime;
         this.fadeColor.a = this.opacity;
-        this.fade.guiTexture.color = this.fadeColor;
+        this.blackoutCurtain.guiTexture.color = this.fadeColor;
         if (this.opacity < 0)
         {
             this.isFadeIn = false;
@@ -75,10 +63,11 @@ public class FadeManager : MonoBehaviour {
         // 時間が経過する度に不透明度を上げる
         this.opacity += this.fadeSpeed * Time.deltaTime;
         this.fadeColor.a = this.opacity;
-        this.fade.guiTexture.color = this.fadeColor;
+        this.blackoutCurtain.guiTexture.color = this.fadeColor;
         if (this.opacity > this.maxOpacity)
         {
             this.isFadeOut = false;
         }
     }
 }
+
