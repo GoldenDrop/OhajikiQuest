@@ -66,7 +66,7 @@ public class PlayerOrb : MonoBehaviour {
                 {
                     // アニメーションが変わるまで待機
                     this.waitTimer -= Time.deltaTime;
-                    Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
+                    //Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
                     if (this.waitTimer < 0)
                     {
                         //Destroy(gameObject);
@@ -81,8 +81,10 @@ public class PlayerOrb : MonoBehaviour {
         }
     }
 
-    void GetAngle(Vector2 delta)
+    void GetAngle(float a)
     {
+        this.angle = a;
+        /*
         this.angle = Mathf.Atan2(delta.x, delta.y) * Mathf.Rad2Deg * -1;
 
         // 角度制限
@@ -95,41 +97,13 @@ public class PlayerOrb : MonoBehaviour {
             this.angle = this.maxAngle;
         }
         //Debug.Log("(GetAngle) angle = " + this.angle + "°");
+         * */
     }
+    
 
-
-    void AddForceToOrb(Vector2 delta)
+    void AddForceToOrb(Vector2 power)
     {
-        Vector2 pull = delta.normalized; // ベクトルの長さを1にする
-
-        // 角度制限
-        if (this.angle == this.minAngle)
-        {
-            // 与えるベクトルをminAngleのベクトルに変更する
-            pull = new Vector2(Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
-        }
-        else if (this.angle == this.maxAngle)
-        {
-            // 与えるベクトルをmaxAngleのベクトルに変更する
-            pull = new Vector2(-Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
-        }
-
-        float vectorLength = delta.magnitude; // 引っ張りの長さを取得
-        //Debug.Log("(AddForceToBall) delta's VectorLength : " + vectorLength);
-
-        // 長さ制限
-        if (vectorLength < this.minLength)
-        {
-            //Debug.Log("(AddForceToBall) Min Length");
-            vectorLength = this.minLength;
-        }
-        else if (vectorLength > this.maxLength)
-        {
-            //Debug.Log("(AddForceToBall) Max Length");
-            vectorLength = this.maxLength;
-        }
-
-        gameObject.rigidbody2D.AddForce(pull * vectorLength * FORCE);
+        gameObject.rigidbody2D.AddForce(power * FORCE);
         this.isMoving = true;
     }
 

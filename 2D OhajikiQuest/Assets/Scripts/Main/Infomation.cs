@@ -36,14 +36,14 @@ public class Infomation : MonoBehaviour {
         //Debug.Log("(GetAngle) angle = " + this.angle + "°");
     }
 
-    void Turn()
+    void Turn(float angle)
     {
-        float thetaAngle = (90 - this.angle) * Mathf.Rad2Deg;
-        Vector2 deltaPosition = new Vector2(Mathf.Cos(thetaAngle), Mathf.Sin(thetaAngle));
-        this.rotation.eulerAngles = new Vector3(0, 0, this.angle);
+        this.rotation.eulerAngles = new Vector3(0, 0, angle);
         transform.rotation = rotation;
-        this.position = transform.position;
-        Vector2 turnPosition = this.position - deltaPosition;
+        // float thetaAngle = (90 - this.angle) * Mathf.Rad2Deg;
+        //Vector2 deltaPosition = new Vector2(Mathf.Cos(thetaAngle), Mathf.Sin(thetaAngle));
+        //this.position = transform.position;
+        //Vector2 turnPosition = this.position - deltaPosition;
         // 上手くいってない　後回し
 
         //transform.localPosition = turnPosition;

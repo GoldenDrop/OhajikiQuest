@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerOrbController : MonoBehaviour {
-
+    /*
     public float speed = 5.0f;
     public GameObject playerPrefab;
     GameObject playerOrb;
@@ -127,5 +127,5 @@ public class PlayerOrbController : MonoBehaviour {
         this.isPulled = false;
         //this.infomation.SendMessage("ChangeTransparency", 0);
         
-    }
+    }*/
 }
