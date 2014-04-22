@@ -19,7 +19,7 @@ public class PlayerOrb : MonoBehaviour {
     float minAngle;
     float maxAngle;
     public float minLength = 0.5f;
-    public float maxLength = 2.0f;
+    public float maxLength = 3.5f;
     Quaternion rotation;
     Transform yusha;
 
