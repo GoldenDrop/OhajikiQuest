@@ -5,7 +5,7 @@ public class MoveCamera : MonoBehaviour {
 
 	void Start () 
     {
-	    // Test
+	    // 移動テスト
         string test = "STAGE";
         Move(test);
 	}
