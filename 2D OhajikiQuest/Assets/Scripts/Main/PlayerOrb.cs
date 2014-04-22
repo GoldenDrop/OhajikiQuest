@@ -21,6 +21,7 @@ public class PlayerOrb : MonoBehaviour {
     public float minLength = 0.5f;
     public float maxLength = 2.0f;
     Quaternion rotation;
+    Transform yusha;
 
     void Start()
     {
@@ -31,6 +32,8 @@ public class PlayerOrb : MonoBehaviour {
         this.minAngle = -90 + limitAngle;
         this.maxAngle = 90 - limitAngle;
         ChangeTransparency(0);
+        this.yusha = gameObject.transform.Find("Yusha");
+        
         
     }
 
@@ -45,14 +48,18 @@ public class PlayerOrb : MonoBehaviour {
 
             if (this.moveTimer < 0)
             {
+                gameObject.rigidbody2D.velocity = Vector2.zero;
                 if (!this.isStoped)
                 {
-                    gameObject.rigidbody2D.velocity = Vector2.zero;
+                    //gameObject.rigidbody2D.velocity = Vector2.zero;
                     gameObject.rigidbody2D.fixedAngle = true;
                     gameObject.rigidbody2D.fixedAngle = false;
+                    gameObject.rigidbody2D.isKinematic = true;
                     this.rotation.eulerAngles = Vector3.zero;
                     transform.rotation = rotation;
                     ChangeTransparency(0);
+                    // Downアニメーション開始
+                    this.yusha.SendMessage("Down", true);
                     this.isStoped = true;
                 }
                 else
@@ -62,9 +69,10 @@ public class PlayerOrb : MonoBehaviour {
                     Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
                     if (this.waitTimer < 0)
                     {
-                        Destroy(gameObject);
+                        //Destroy(gameObject);
                         this.phaseControl.SendMessage("SetPhase", 2);
                         this.waitTimer = this.waitInterval;
+                        this.moveTimer = this.moveInterval;
                         this.isMoving = false;
                         this.isStoped = false;
                     }
@@ -129,6 +137,14 @@ public class PlayerOrb : MonoBehaviour {
     {
         Color orbColor = new Color(1, 1, 1, alpha);
         this.renderer.color = orbColor;
+    }
+
+    void MoveToFirstPosition()
+    {
+        //transform.localPosition = this.firstPosition;
+        transform.localPosition = Vector2.zero;
+        gameObject.rigidbody2D.isKinematic = false;
+
     }
 }
 

@@ -6,7 +6,7 @@ public class PlayerOrbController : MonoBehaviour {
     public float speed = 5.0f;
     public GameObject playerPrefab;
     GameObject playerOrb;
-    GameObject magicCircle;
+    Transform yusha;
     Transform infomation;
     GetPhase getPhase;
 
@@ -24,9 +24,12 @@ public class PlayerOrbController : MonoBehaviour {
     void Start()
     {
         this.getPhase = gameObject.GetComponent<GetPhase>();
-        this.magicCircle = GameObject.FindWithTag("MagicCircle");
-        this.infomation = this.magicCircle.transform.Find("Infomation");
+        //this.infomation = this.magicCircle.transform.Find("Infomation");
+        this.infomation = gameObject.transform.Find("Infomation");
         CreatePlayer();
+        this.yusha = gameObject.transform.Find("PlayerOrb(Clone)/Yusha");
+        // MoveDownアニメーション開始
+        //this.yusha.SendMessage("MoveDown");
     }
 
     void Update()
@@ -63,8 +66,8 @@ public class PlayerOrbController : MonoBehaviour {
             this.isPulled = true;
             this.firstPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //Debug.Log("firstPoint(" + this.firstPoint.x + ", " + this.firstPoint.y + ")");
-            // Recitesアニメーション開始 playerオブジェクトの子オブジェクトのYushaオブジェクトへアクセス
-
+            // Recitesアニメーション開始
+            this.yusha.SendMessage("Recites", true);
             // PlayerOrb表示開始
             float orbAlpha = 0.4f;
             this.playerOrb.SendMessage("ChangeTransparency", orbAlpha);
@@ -97,6 +100,8 @@ public class PlayerOrbController : MonoBehaviour {
             this.isMoving = true;
             float infoAlpha = 0;
             this.infomation.SendMessage("ChangeTransparency", infoAlpha);
+            // Standアニメーション開始
+            this.yusha.SendMessage("Stand", true);
             this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             this.deltaPoint = this.firstPoint - this.mousePoint;
             this.playerOrb.SendMessage("GetAngle", this.deltaPoint);   // 先に角度を計算する
@@ -115,6 +120,9 @@ public class PlayerOrbController : MonoBehaviour {
     void InitializedPlayer()
     {
         Debug.Log("Initialization Player");
+        this.playerOrb.SendMessage("MoveToFirstPosition");
+        this.yusha.SendMessage("OffFlags");
+        //this.yusha.SendMessage("MoveDown");
         this.isMoving = false;
         this.isPulled = false;
         //this.infomation.SendMessage("ChangeTransparency", 0);
