@@ -61,7 +61,6 @@ public class PhaseControl : MonoBehaviour {
             this.enemyTime -= Time.deltaTime;
             if (this.enemyTime < 0)
             {
-                //this.magicCircle.SendMessage("CreatePlayer");
                 this.magicCircle.SendMessage("InitializedPlayer");
                 this.phase = 1;
                 this.enemyTime = this.enemyTimeInterval;
