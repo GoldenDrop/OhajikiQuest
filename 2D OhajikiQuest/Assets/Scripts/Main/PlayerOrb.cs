@@ -1,31 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ball : MonoBehaviour {
-    Quaternion rotation;
+public class PlayerOrb : MonoBehaviour {
+
     public int FORCE = 500;
-    GameObject catapult;
+
     GameObject phaseControl;
+    SpriteRenderer renderer;
+    Color orbColor;
     bool isMoving = false;
+    bool isStoped = false;
     float moveTimer;
     float moveInterval = 3.0f;
+    float waitTimer;
+    float waitInterval = 3.0f;
     float angle;
     public float limitAngle = 30.0f;
     float minAngle;
     float maxAngle;
     public float minLength = 0.5f;
     public float maxLength = 2.0f;
+    Quaternion rotation;
 
-	void Start () 
+    void Start()
     {
-        this.catapult     = GameObject.FindWithTag("Catapult");
+        this.renderer = GetComponent<SpriteRenderer>();
         this.phaseControl = GameObject.FindWithTag("PhaseControl");
-        this.moveTimer    = this.moveInterval;
+        this.moveTimer = this.moveInterval;
+        this.waitTimer = this.waitInterval;
         this.minAngle = -90 + limitAngle;
-        this.maxAngle =  90 - limitAngle;
-	}
-	
-	void Update () 
+        this.maxAngle = 90 - limitAngle;
+        ChangeTransparency(0);
+        
+    }
+
+    void Update()
     {
         if (this.isMoving)
         {
@@ -36,17 +45,33 @@ public class Ball : MonoBehaviour {
 
             if (this.moveTimer < 0)
             {
-                gameObject.rigidbody2D.velocity = Vector2.zero;
-                gameObject.rigidbody2D.fixedAngle = true;
-                gameObject.rigidbody2D.fixedAngle = false;
-                
-                Destroy(gameObject);
-                this.isMoving = false;
-                this.phaseControl.SendMessage("SetPhase", 2);
-                this.moveTimer = this.moveInterval;
+                if (!this.isStoped)
+                {
+                    gameObject.rigidbody2D.velocity = Vector2.zero;
+                    gameObject.rigidbody2D.fixedAngle = true;
+                    gameObject.rigidbody2D.fixedAngle = false;
+                    this.rotation.eulerAngles = Vector3.zero;
+                    transform.rotation = rotation;
+                    ChangeTransparency(0);
+                    this.isStoped = true;
+                }
+                else
+                {
+                    // アニメーションが変わるまで待機
+                    this.waitTimer -= Time.deltaTime;
+                    Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
+                    if (this.waitTimer < 0)
+                    {
+                        Destroy(gameObject);
+                        this.phaseControl.SendMessage("SetPhase", 2);
+                        this.waitTimer = this.waitInterval;
+                        this.isMoving = false;
+                        this.isStoped = false;
+                    }
+                }
             }
         }
-	}
+    }
 
     void GetAngle(Vector2 delta)
     {
@@ -61,17 +86,11 @@ public class Ball : MonoBehaviour {
         {
             this.angle = this.maxAngle;
         }
-        Debug.Log("(GetAngle) angle = " + this.angle + "°");
+        //Debug.Log("(GetAngle) angle = " + this.angle + "°");
     }
 
-    void Turn()
-    {
-        this.rotation.eulerAngles = new Vector3(0, 0, this.angle);
-        transform.rotation = rotation;
-    }
 
-   
-    void AddForceToBall(Vector2 delta)
+    void AddForceToOrb(Vector2 delta)
     {
         Vector2 pull = delta.normalized; // ベクトルの長さを1にする
 
@@ -88,21 +107,28 @@ public class Ball : MonoBehaviour {
         }
 
         float vectorLength = delta.magnitude; // 引っ張りの長さを取得
-        Debug.Log("(AddForceToBall) delta's VectorLength : " + vectorLength);
+        //Debug.Log("(AddForceToBall) delta's VectorLength : " + vectorLength);
 
         // 長さ制限
         if (vectorLength < this.minLength)
         {
-            Debug.Log("(AddForceToBall) Min Length");
+            //Debug.Log("(AddForceToBall) Min Length");
             vectorLength = this.minLength;
         }
         else if (vectorLength > this.maxLength)
         {
-            Debug.Log("(AddForceToBall) Max Length");
+            //Debug.Log("(AddForceToBall) Max Length");
             vectorLength = this.maxLength;
         }
 
         gameObject.rigidbody2D.AddForce(pull * vectorLength * FORCE);
         this.isMoving = true;
     }
+
+    void ChangeTransparency(float alpha) // 透明度変更
+    {
+        Color orbColor = new Color(1, 1, 1, alpha);
+        this.renderer.color = orbColor;
+    }
 }
+

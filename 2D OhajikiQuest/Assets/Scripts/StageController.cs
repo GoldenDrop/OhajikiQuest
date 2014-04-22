@@ -12,10 +12,10 @@ public class StageController : MonoBehaviour {
 
     void CreateStage()
     {
-        string path = "Stage/" + this.stageNumber;
+        string path = "Prefabs/Stage/" + this.stageNumber;
         Debug.Log("path : " + path);
         GameObject stagePrefab = Resources.Load(path) as GameObject;
-        this.stage = Instantiate(stagePrefab, Vector2.zero, Quaternion.identity) as GameObject;
+        this.stage = Instantiate(stagePrefab, new Vector2(10.0f, 0), Quaternion.identity) as GameObject;
 
     }
 
