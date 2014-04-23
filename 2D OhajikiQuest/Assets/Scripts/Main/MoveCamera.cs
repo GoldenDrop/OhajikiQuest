@@ -6,7 +6,7 @@ public class MoveCamera : MonoBehaviour {
 	void Start () 
     {
 	    // 移動テスト
-        string test = "STAGE";
+        string test = "TITLE";
         Move(test);
 	}
 
