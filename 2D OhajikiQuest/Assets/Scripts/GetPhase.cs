@@ -18,16 +18,16 @@ public class GetPhase : MonoBehaviour {
         return phaseNumber;
     }
 
-    public int GetPhaseNumber(string phaseCase)
+    public int GetTrunNumber(string phaseCase)
     {
         int getNumber = 0;
         switch (phaseCase)
         {
             case "Player" : // playerフェイス回数を取ってくる
-                getNumber = this.phaseComponent.GetPlayerPhaseNumber();
+                getNumber = this.phaseComponent.GetPlayerTrunNumber();
                 break;
             case "Enemy" : // enemyフェイス回数を取ってくる
-                getNumber = this.phaseComponent.GetEnemyPhaseNumber();
+                getNumber = this.phaseComponent.GetEnemyTurnNumber();
                 break;
         }
         return getNumber;

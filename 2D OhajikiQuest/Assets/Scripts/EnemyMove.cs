@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemyMove : MonoBehaviour {
     GetPhase getPhase;
     int phase = 0;
-    int phaseNumber = 0;
+    int turnNumber = 0;
     public int moveInterval = 1; // 何ターン毎に動くか
 
 	void Start () 
@@ -19,9 +19,9 @@ public class EnemyMove : MonoBehaviour {
         //Debug.Log("Enemy Get Phase : " + this.phase);
         if (this.phase == 2) // 敵フェイズ
         {
-            this.phaseNumber = this.getPhase.GetPhaseNumber("Enemy");
+            this.turnNumber = this.getPhase.GetTrunNumber("Enemy");
             //Debug.Log("GetEnemyPhaseNumber : " + this.phaseNumber);
-            if (this.phaseNumber % this.moveInterval == 0)
+            if (this.turnNumber % this.moveInterval == 0)
             {
                 Move();
             }
