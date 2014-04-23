@@ -25,9 +25,9 @@ public class Score : MonoBehaviour {
         CreateNumber(5, n);
 	}
 
-    void UpdteScore(int scoreNumber)
+    void UpdateScore(int point)
     {
-        this.score = scoreNumber;
+        this.score += point;
         ScoreToGameObject();
     }
 

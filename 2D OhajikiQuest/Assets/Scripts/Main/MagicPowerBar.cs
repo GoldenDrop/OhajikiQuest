@@ -24,10 +24,10 @@ public class MagicPowerBar : MonoBehaviour {
                 // はみ出ないように長さを調節
                 this.lostPower = 0;
             }
-            Debug.Log("lostPower : " + this.lostPower);
+            // Debug.Log("lostPower : " + this.lostPower);
             ChangeMagicPower(lostPower);
             this.timer -= Time.deltaTime;
-            Debug.Log("timer : " + this.timer);
+            //Debug.Log("timer : " + this.timer);
             if (this.timer < 0)
             {
                 this.isReleased = false;
@@ -44,7 +44,7 @@ public class MagicPowerBar : MonoBehaviour {
             power = 1.0f;
         }
         this.lostPower = power;
-        Debug.Log("ChangeMagicPower lostPower : " + this.lostPower);
+        // Debug.Log("ChangeMagicPower lostPower : " + this.lostPower);
         Vector3 scale = new Vector3(power, 0.5f, 1.0f);
         gameObject.transform.localScale = scale;
     }

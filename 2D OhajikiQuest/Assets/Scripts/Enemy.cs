@@ -4,18 +4,25 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
     public GameObject hpBarPrefab;
+    public int point = 50;
     public int maxHP = 4;
     public float hpBarW = 0.15f;
     public float hpBarH = 0.10f;
     public float xOffset = 0.03f;
     public float yOffset = 0.05f;
+
     int hp;
 
     GameObject gameController;
+    GameObject gui;
+    Transform score;
+
 
 	void Start () 
     {
         this.gameController = GameObject.FindWithTag("GameController");
+        this.gui = GameObject.FindWithTag("GUI");
+        this.score = this.gui.transform.Find("BottomBord/SCORE");
         this.hp = maxHP;
         CreateHPBar();
 	}
@@ -55,6 +62,7 @@ public class Enemy : MonoBehaviour {
         {
             Destroy(gameObject);
             this.gameController.SendMessage("UpdateEnemyCount");
+            this.score.SendMessage("UpdateScore", this.point);
         }
     }
 
@@ -62,7 +70,7 @@ public class Enemy : MonoBehaviour {
     {
         switch (hit.gameObject.tag)
         {
-            case "Ball":
+            case "Player":
                 ReceivedDamage();
                 break;
         }
