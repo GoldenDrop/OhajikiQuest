@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class FadeManager2 : MonoBehaviour {
-    GameObject blackoutCurtainObject;   // 暗幕オブジェクト
     Transform blackoutCurtain;
     float fadeSpeed = 0.5f;          // フェイドの速さ
     float opacity = 1.0f;           // 不透明度
@@ -13,10 +12,9 @@ public class FadeManager2 : MonoBehaviour {
 
 	void Start () 
     {
-        this.blackoutCurtainObject = GameObject.FindWithTag("BlackoutCurtain");
-        this.blackoutCurtain = this.blackoutCurtainObject.transform.Find("BlackoutCurtain");
-        this.fadeColor = Color.black;
-        OnFadeInFlag(0.8f);
+        this.blackoutCurtain = gameObject.transform.Find("BlackoutCurtain");
+        this.fadeColor = new Color(0, 0, 0, 0);
+        //OnFadeInFlag(0.8f);
 	}
 	
 	void Update () 

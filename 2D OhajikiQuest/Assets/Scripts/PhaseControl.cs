@@ -5,7 +5,7 @@ public class PhaseControl : MonoBehaviour {
     int phase = 0;
     float enemyTime;
     float enemyTimeInterval = 2.5f;
-    GameObject catapult;
+    GameObject magicCircle;
 
     // それぞれのフェイズ回数
     int playerPhaseNumber = 0;
@@ -14,7 +14,7 @@ public class PhaseControl : MonoBehaviour {
 
     void Start()
     {
-        this.catapult = GameObject.FindWithTag("Catapult");
+        this.magicCircle = GameObject.FindWithTag("MagicCircle");
         this.phase = 1;
         this.playerPhaseNumber++;
         this.enemyTime = this.enemyTimeInterval;
@@ -61,8 +61,8 @@ public class PhaseControl : MonoBehaviour {
             this.enemyTime -= Time.deltaTime;
             if (this.enemyTime < 0)
             {
+                this.magicCircle.SendMessage("InitializedPlayer");
                 this.phase = 1;
-                this.catapult.SendMessage("InitializedCatapult");
                 this.enemyTime = this.enemyTimeInterval;
             }
         }
