@@ -9,20 +9,15 @@ public class Score : MonoBehaviour {
     GameObject threeDigit;
     GameObject fourDigit;
     GameObject fiveDigit;
-    GameObject resultScore;
-
+    GameObject result;
     float xOffset = 0.25f;
     float yOffset = 0.35f;
 
 
-	void Start () {
-	    // Resultへの参照を追加予定
-        string n = "0";
-        CreateNumber(1, n);
-        CreateNumber(2, n);
-        CreateNumber(3, n);
-        CreateNumber(4, n);
-        CreateNumber(5, n);
+	void Start () 
+    {
+        this.result = GameObject.FindWithTag("Result");
+        UpdateScore(0);
 	}
 
     void UpdateScore(int point)
@@ -89,5 +84,16 @@ public class Score : MonoBehaviour {
                 this.fiveDigit = Instantiate(fivePrefab, firstPoint - new Vector2(4 * xOffset, 0), Quaternion.identity) as GameObject;
                 break;
         }
+    }
+
+    void ResetScore()
+    {
+        this.score = 0;
+        UpdateScore(0);
+    }
+
+    void SendToResultScore()
+    {
+        this.result.SendMessage("CatchScore", this.score);
     }
 }

@@ -8,6 +8,7 @@ public class PhaseControl : MonoBehaviour {
     GameObject magicCircle;
     GameObject gui;
     GameObject title;
+    GameObject result;
     Transform turn;
 
     // それぞれのターン回数
@@ -18,6 +19,7 @@ public class PhaseControl : MonoBehaviour {
 
     void Start()
     {
+        this.result = GameObject.FindWithTag("Result");
         this.magicCircle = GameObject.FindWithTag("MagicCircle");
         this.title = GameObject.FindWithTag("Title");
         this.gui = GameObject.FindWithTag("GUI");
@@ -28,6 +30,7 @@ public class PhaseControl : MonoBehaviour {
 
     public void SetPhase(int p)
     {
+        
         this.phase = p;
         switch (this.phase)
         {
@@ -77,6 +80,23 @@ public class PhaseControl : MonoBehaviour {
                 SetPhase(1);
                 this.enemyTime = this.enemyTimeInterval;
             }
-        }
+        }   
+    }
+
+    void ResetTurns()
+    {
+        this.playerTurn = 0;
+        this.enemyTrun  = 0;
+        this.turn.SendMessage("UpdteTurn", playerTurn);
+    }
+
+    void ResetTotalTurn()
+    {
+        this.totalTurn = 0;
+    }
+
+    void SendToResultTotalTurn()
+    {
+        this.result.SendMessage("CatchTotalTurn", this.totalTurn);
     }
 }

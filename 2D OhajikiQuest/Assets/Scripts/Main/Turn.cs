@@ -14,9 +14,6 @@ public class Turn : MonoBehaviour {
 	void Start () 
     {
         TurnToGameObject();
-        //string n = "0";
-        //CreateNumber(1, n);
-        //CreateNumber(2, n);
 	}
 
     void UpdteTurn(int turnNumber)

@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class GetPhase : MonoBehaviour {
-    GameObject phaseControl;
+    GameObject phaseController;
     PhaseControl phaseComponent;
 
 	void Start () 
     {
-        this.phaseControl = GameObject.FindWithTag("PhaseControl");
-        this.phaseComponent = this.phaseControl.GetComponent<PhaseControl>();
+        this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.phaseComponent = this.phaseController.GetComponent<PhaseControl>();
 	}
 
     public int GetNowPhase()

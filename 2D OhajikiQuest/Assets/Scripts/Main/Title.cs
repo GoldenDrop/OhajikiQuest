@@ -17,7 +17,7 @@ public class Title : MonoBehaviour {
     bool onClick = false;
     bool isStartedFadeOut = false;
     bool isStartedFadeIn = false;
-    GameObject phaseControl;
+    GameObject phaseController;
 
 
 	void Start () 
@@ -26,7 +26,7 @@ public class Title : MonoBehaviour {
         this.mainCamera   = GameObject.FindWithTag("MainCamera");
         this.titleText    = gameObject.transform.Find("TitleText");
         this.startText    = gameObject.transform.Find("StartText");
-        this.phaseControl = GameObject.FindWithTag("PhaseControl");
+        this.phaseController = GameObject.FindWithTag("PhaseController");
         this.blinkTimer   = this.blinkInterval;
         this.fadeOutTimer = this.fadeOutInterval;
         this.fadeInTimer = this.fadeInInterval;
@@ -38,7 +38,7 @@ public class Title : MonoBehaviour {
         {
             this.blinkTimer -= Time.deltaTime;
 
-            if (this.blinkTimer < 0)
+            if (this.blinkTimer < 0 & !this.onClick)
             {
                 BlinkStartText();
                 this.blinkTimer = this.blinkInterval;
@@ -58,17 +58,26 @@ public class Title : MonoBehaviour {
                 if (this.fadeOutTimer < 0)
                 {
                     Debug.Log("Title FadeInStart");
-                    this.fadeInTimer -= Time.deltaTime;
-                    ChangeDisplayTexts(false);
-                    string place = "STAGE";
-                    this.mainCamera.SendMessage("Move", place);
                     if (!this.isStartedFadeIn)
                     {
+                        ChangeDisplayTexts(false);
+                        string place = "STAGE";
+                        this.mainCamera.SendMessage("Move", place);
                         float fadeInSpeed = 0.7f;
                         this.fadeManager.SendMessage("OnFadeInFlag", fadeInSpeed);
                         this.isStartedFadeIn = true;
                     }
-                    UpDatePhase(0);
+                    this.fadeInTimer -= Time.deltaTime;
+                    if (this.fadeInTimer < 0)
+                    {
+                        this.fadeOutTimer = this.fadeOutInterval;
+                        this.fadeInTimer = this.fadeInInterval;
+                        this.onClick = false;
+                        this.isStartedFadeOut = false;
+                        this.isStartedFadeIn = false;
+                        this.phaseController.SendMessage("SetPhase", 1);
+                        UpDatePhase(1);
+                    }
                 }
             }
             else
@@ -79,18 +88,6 @@ public class Title : MonoBehaviour {
                 }
             }
         }
-        if (this.phase == 0)
-        {
-            this.fadeOutTimer = this.fadeOutInterval;
-            this.fadeInTimer = this.fadeInInterval;
-            this.onClick = false;
-            this.isStartedFadeOut = false;
-            this.isStartedFadeIn = false;
-            this.phaseControl.SendMessage("SetPhase", 1);
-            UpDatePhase(1);
-        }
-
-        
 	}
 
     void UpDatePhase(int phaseNumber) 

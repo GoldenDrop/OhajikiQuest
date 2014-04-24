@@ -5,7 +5,7 @@ public class PlayerOrb : MonoBehaviour {
 
     public int FORCE = 500;
 
-    GameObject phaseControl;
+    GameObject phaseController;
     SpriteRenderer orbRenderer;
     CircleCollider2D circleCollider;
     Color orbColor;
@@ -14,7 +14,7 @@ public class PlayerOrb : MonoBehaviour {
     float moveTimer;
     float moveInterval = 3.0f;
     float waitTimer;
-    float waitInterval = 3.0f;
+    float waitInterval = 1.5f;
     float angle;
     public float limitAngle = 30.0f;
     float minAngle;
@@ -24,12 +24,14 @@ public class PlayerOrb : MonoBehaviour {
     Quaternion rotation;
     Transform yusha;
 
+    
+
     void Start()
     {
         this.orbRenderer    = GetComponent<SpriteRenderer>();
         this.circleCollider = GetComponent<CircleCollider2D>();
 
-        this.phaseControl = GameObject.FindWithTag("PhaseControl");
+        this.phaseController = GameObject.FindWithTag("PhaseController");
         this.moveTimer = this.moveInterval;
         this.waitTimer = this.waitInterval;
         this.minAngle = -90 + limitAngle;
@@ -72,8 +74,7 @@ public class PlayerOrb : MonoBehaviour {
                     //Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
                     if (this.waitTimer < 0)
                     {
-                        //Destroy(gameObject);
-                        this.phaseControl.SendMessage("SetPhase", 2);
+                        this.phaseController.SendMessage("SetPhase", 2);
                         this.waitTimer = this.waitInterval;
                         this.moveTimer = this.moveInterval;
                         this.isMoving = false;
