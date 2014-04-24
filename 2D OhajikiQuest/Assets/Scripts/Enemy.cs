@@ -14,13 +14,17 @@ public class Enemy : MonoBehaviour {
     int hp;
 
     GameObject gameController;
+    GameObject player;
     GameObject gui;
+
+
     Transform score;
 
 
 	void Start () 
     {
         this.gameController = GameObject.FindWithTag("GameController");
+        this.player = GameObject.FindWithTag("Player");
         this.gui = GameObject.FindWithTag("GUI");
         this.score = this.gui.transform.Find("BottomBord/SCORE");
         this.hp = maxHP;
@@ -61,6 +65,7 @@ public class Enemy : MonoBehaviour {
         if (this.hp == 0)
         {
             Destroy(gameObject);
+            this.player.SendMessage("OnClearFlag");
             this.gameController.SendMessage("UpdateEnemyCount");
             this.score.SendMessage("UpdateScore", this.point);
         }

@@ -5,7 +5,7 @@ public class MoveCamera : MonoBehaviour {
 
 	void Start () 
     {
-	    // 移動テスト
+        // 移動テスト GAMEOVER TITLE RESULT
         string test = "TITLE";
         Move(test);
 	}

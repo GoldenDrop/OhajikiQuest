@@ -25,11 +25,15 @@ public class SystemMessage : MonoBehaviour {
     GameObject stageController;
     GameObject fadeManager;
     GameObject mainCamera;
+    GameObject magicCircle;
 
     float fadeOutTimer;
     float fadeOutInterval = 1.5f;
     float fadeInTimer;
     float fadeInInterval = 1.5f;
+    float massageTimer;
+    float massageTime = 1.0f;
+
     bool isStartedFadeOut = false;
     bool isStartedFadeIn = false;
     bool isMessageStop = false;
@@ -44,6 +48,7 @@ public class SystemMessage : MonoBehaviour {
         this.stageController = GameObject.FindWithTag("StageController");
         this.fadeManager = GameObject.FindWithTag("FadeManager");
         this.mainCamera = GameObject.FindWithTag("MainCamera");
+        this.magicCircle = GameObject.FindWithTag("MagicCircle");
 
         this.stageObject = gameObject.transform.Find("STAGE");
         this.clearObject = gameObject.transform.Find("CLEAR");
@@ -63,22 +68,24 @@ public class SystemMessage : MonoBehaviour {
         this.moveTimer = this.moveTime;
         this.fadeOutTimer = this.fadeOutInterval;
         this.fadeInTimer = this.fadeInInterval;
-
+        this.massageTimer = this.massageTime;
         //this.clearFlag = true;
 	}
 	
 	void Update () 
     {
-        /*
-        if (this.clearFlag)
-        {
-            ClearMessage();
-        }
-        */
         switch (this.messageFlag)
         {
-            case "CLEAR" :
+            case "CLEAR":
                 ClearMessage();
+                break;
+
+            case "START":
+                BattleStartMessage();
+                break;
+
+            case "GAMEOVERE":
+                GameOverMessage();
                 break;
         }
 	}
@@ -107,7 +114,7 @@ public class SystemMessage : MonoBehaviour {
                 {
                     this.stageObject.transform.localPosition = this.topPoint;
                     this.clearObject.transform.localPosition = this.bottomPoint;
-
+                    this.magicCircle.SendMessage("InitializedPlayer");
                     this.stageController.SendMessage("NextStage");
                     this.phaseController.SendMessage("ResetTurns");
                     float fadeInSpeed = 0.7f;
@@ -117,12 +124,13 @@ public class SystemMessage : MonoBehaviour {
                 this.fadeInTimer -= Time.deltaTime;
                 if (this.fadeInTimer < 0)
                 {
-                    this.messageFlag = "WAIT";
+                    Debug.Log("fadeInTimer 0");
                     this.isStartedFadeOut = false;
                     this.isStartedFadeIn = false;
                     this.moveTimer = this.moveTime;
                     this.fadeOutTimer = this.fadeOutInterval;
                     this.fadeInTimer = this.fadeInInterval;
+                    this.messageFlag = "START";
                 }
             }
 
@@ -136,23 +144,27 @@ public class SystemMessage : MonoBehaviour {
 
     void BattleStartMessage()
     {
-
+        this.moveTimer -= Time.deltaTime;
+        if (this.moveTimer > 0)
+        {
+            this.battleObject.transform.Translate(-Vector2.up * this.moveSpeed * Time.deltaTime);
+            this.startObject.transform.Translate(Vector2.up * this.moveSpeed * Time.deltaTime);
+        }
+        if (this.moveTimer < 0)
+        {
+            this.massageTimer -= Time.deltaTime;
+            if (this.massageTimer < 0)
+            {
+                this.battleObject.transform.localPosition = this.topPoint;
+                this.startObject.transform.localPosition = this.bottomPoint;
+                this.phaseController.SendMessage("SetPhase", 1);
+                this.messageFlag = "WAIT";
+                this.moveTimer = this.moveTime;
+                this.massageTimer = this.massageTime;
+            }
+        }
     }
 
-    void OnClearFlag()
-    {
-        this.clearFlag = true;
-    }
-
-    void OnGameOverFlag()
-    {
-        this.gameOverFlag = true;
-    }
-
-    void OnBattleStartFlag()
-    {
-        this.battleStartFlag = true;
-    }
 
     void OnFlag(string flag)
     {

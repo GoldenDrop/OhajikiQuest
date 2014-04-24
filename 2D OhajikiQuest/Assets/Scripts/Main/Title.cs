@@ -18,6 +18,7 @@ public class Title : MonoBehaviour {
     bool isStartedFadeOut = false;
     bool isStartedFadeIn = false;
     GameObject phaseController;
+    GameObject systemMessage;
 
 
 	void Start () 
@@ -26,6 +27,7 @@ public class Title : MonoBehaviour {
         this.mainCamera   = GameObject.FindWithTag("MainCamera");
         this.titleText    = gameObject.transform.Find("TitleText");
         this.startText    = gameObject.transform.Find("StartText");
+        this.systemMessage = GameObject.FindWithTag("SystemMessage");
         this.phaseController = GameObject.FindWithTag("PhaseController");
         this.blinkTimer   = this.blinkInterval;
         this.fadeOutTimer = this.fadeOutInterval;
@@ -75,8 +77,11 @@ public class Title : MonoBehaviour {
                         this.onClick = false;
                         this.isStartedFadeOut = false;
                         this.isStartedFadeIn = false;
-                        this.phaseController.SendMessage("SetPhase", 1);
-                        UpDatePhase(1);
+                        int phase = 0;
+                        this.phaseController.SendMessage("SetPhase", phase);
+                        UpDatePhase(0);
+                        string flag = "START";
+                        this.systemMessage.SendMessage("OnFlag", flag);
                     }
                 }
             }

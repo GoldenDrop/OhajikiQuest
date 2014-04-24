@@ -51,7 +51,7 @@ public class FadeManager2 : MonoBehaviour {
 
     void FadeIn()
     {
-        Debug.Log("FadeIn opacity : " + this.opacity);
+        //Debug.Log("FadeIn opacity : " + this.opacity);
         // 時間が経過する度に不透明度を下げる
         this.opacity -= this.fadeSpeed * Time.deltaTime;
         if (this.opacity < 0)
@@ -61,7 +61,7 @@ public class FadeManager2 : MonoBehaviour {
         }
         this.fadeColor.a = this.opacity;
         this.blackoutCurtain.guiTexture.color = this.fadeColor;
-        Debug.Log("opacity : " + this.opacity);
+        //Debug.Log("opacity : " + this.opacity);
     }
 
     void FadeOut()

@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour {
     float waitTime = 3.5f;
     GameObject phaseController;
     GameObject systemMessage;
+    
+
 
     void Start()
     {

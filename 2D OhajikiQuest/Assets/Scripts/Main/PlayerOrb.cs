@@ -11,6 +11,8 @@ public class PlayerOrb : MonoBehaviour {
     Color orbColor;
     bool isMoving = false;
     bool isStoped = false;
+    bool isClear  = false;
+
     float moveTimer;
     float moveInterval = 3.0f;
     float waitTimer;
@@ -74,11 +76,15 @@ public class PlayerOrb : MonoBehaviour {
                     //Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
                     if (this.waitTimer < 0)
                     {
-                        this.phaseController.SendMessage("SetPhase", 2);
+                        if (!isClear)
+                        {
+                            this.phaseController.SendMessage("SetPhase", 2);
+                        }
                         this.waitTimer = this.waitInterval;
                         this.moveTimer = this.moveInterval;
                         this.isMoving = false;
                         this.isStoped = false;
+                        this.isClear = false;
                     }
                 }
             }
@@ -102,6 +108,11 @@ public class PlayerOrb : MonoBehaviour {
     {
         transform.localPosition = Vector2.zero;
         this.circleCollider.isTrigger = false;
+    }
+
+    void OnClearFlag()
+    {
+        this.isClear = true;
     }
 }
 
