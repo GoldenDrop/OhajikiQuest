@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
     float waitTime = 3.5f;
     GameObject phaseController;
     GameObject systemMessage;
+    string eventFlag = "WAIT";
     
 
 
@@ -23,18 +24,29 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
-        if (this.clearFloag)
+        switch (this.eventFlag)
         {
-            this.waitTimer -= Time.deltaTime;
-            if (this.waitTimer < 0)
-            {
+            case "CLEAR":
+                this.waitTimer -= Time.deltaTime;
+                if (this.waitTimer < 0)
+                {
+                    int phase = 0;
+                    this.phaseController.SendMessage("SetPhase", phase);
+                    string flag = "CLEAR";
+                    this.systemMessage.SendMessage("OnFlag", flag);
+                    this.eventFlag = "WAIT";
+                    this.waitTimer = this.waitTime;
+                }
+                break;
+
+            case "GAMEOVER":
+                Debug.Log("Flag = GAMEOVER");
                 int phase = 0;
                 this.phaseController.SendMessage("SetPhase", phase);
-                string flag = "CLEAR";
+                string flag = "GAMEOVER";
                 this.systemMessage.SendMessage("OnFlag", flag);
-                this.clearFloag = false;
-                this.waitTimer = this.waitTime;
-            }
+                this.eventFlag = "WAIT";
+                break;
         }
     }
 
@@ -51,7 +63,7 @@ public class GameController : MonoBehaviour {
         if (this.enemyCount == 0)
         {
             Debug.Log("GoNextStage");
-            this.clearFloag = true;
+            this.eventFlag = "CLEAR";
         }
     }
 
@@ -63,7 +75,7 @@ public class GameController : MonoBehaviour {
 
     void GameOver()
     {
-        // シーン移動予定
+        this.eventFlag = "GAMEOVER";
         Debug.Log("GameOver");
     }
 }
