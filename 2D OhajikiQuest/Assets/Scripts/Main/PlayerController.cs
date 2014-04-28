@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour {
             float orbAlpha = 0.4f;
             this.playerOrb.SendMessage("ChangeTransparency", orbAlpha);
             // Infomation 表示　
-            float infoAlpha = 1.0f;
+            float infoAlpha = 0.7f;
             this.infomation.SendMessage("ChangeTransparency", infoAlpha);
         }
     }
