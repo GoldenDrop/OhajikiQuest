@@ -19,13 +19,12 @@ public class PhaseControl : MonoBehaviour {
 
     void Start()
     {
-        this.result = GameObject.FindWithTag("Result");
+        this.result      = GameObject.FindWithTag("Result");
         this.magicCircle = GameObject.FindWithTag("MagicCircle");
-        this.title = GameObject.FindWithTag("Title");
-        this.gui = GameObject.FindWithTag("GUI");
-        this.turn = this.gui.transform.Find("BottomBord/TURN");
+        this.gui         = GameObject.FindWithTag("GUI");
+        this.turn        = this.gui.transform.Find("BottomBord/TURN");
+        this.enemyTime   = this.enemyTimeInterval;
         SetPhase(3);
-        this.enemyTime = this.enemyTimeInterval;
     }
 
     public void SetPhase(int p)
@@ -44,9 +43,6 @@ public class PhaseControl : MonoBehaviour {
             case 2:
                 this.enemyTrun++;
                 Debug.Log("enemyTrun ++ : " + this.enemyTrun);
-                break;
-            case 3:
-                this.title.SendMessage("UpDatePhase", this.phase);
                 break;
         }
     }

@@ -3,39 +3,49 @@ using System.Collections;
 
 public class Title : MonoBehaviour {
 
+    GameObject phaseController;
+    GameObject systemMessage;
     GameObject fadeManager;
     GameObject mainCamera;
+
     Transform titleText;
     Transform startText;
     int phase = 0;
+
+    GetPhase getPhase; // 現行フェイズ取得クラス
+
     float blinkTimer;
-    float blinkInterval = 0.6f;
+    float blinkInterval   = 0.6f;
     float fadeOutTimer;
     float fadeOutInterval = 1.5f;
     float fadeInTimer;
-    float fadeInInterval = 1.5f;
-    bool onClick = false;
+    float fadeInInterval  = 1.5f;
+
+    bool onClick          = false;
     bool isStartedFadeOut = false;
-    bool isStartedFadeIn = false;
-    GameObject phaseController;
-    GameObject systemMessage;
+    bool isStartedFadeIn  = false;
 
 
 	void Start () 
     {
-        this.fadeManager  = GameObject.FindWithTag("FadeManager");
-        this.mainCamera   = GameObject.FindWithTag("MainCamera");
-        this.titleText    = gameObject.transform.Find("TitleText");
-        this.startText    = gameObject.transform.Find("StartText");
-        this.systemMessage = GameObject.FindWithTag("SystemMessage");
+        this.getPhase        = gameObject.GetComponent<GetPhase>();
+
+        this.fadeManager     = GameObject.FindWithTag("FadeManager");
+        this.mainCamera      = GameObject.FindWithTag("MainCamera");
+        this.systemMessage   = GameObject.FindWithTag("SystemMessage");
         this.phaseController = GameObject.FindWithTag("PhaseController");
-        this.blinkTimer   = this.blinkInterval;
-        this.fadeOutTimer = this.fadeOutInterval;
-        this.fadeInTimer = this.fadeInInterval;
+
+        this.titleText       = gameObject.transform.Find("TitleText");
+        this.startText       = gameObject.transform.Find("StartText");
+
+        this.blinkTimer      = this.blinkInterval;
+        this.fadeOutTimer    = this.fadeOutInterval;
+        this.fadeInTimer     = this.fadeInInterval;
 	}
 	
 	void Update () 
     {
+        this.phase = this.getPhase.GetNowPhase();
         if (this.phase == 3) // Titleフェイズなら
         {
             this.blinkTimer -= Time.deltaTime;
@@ -79,7 +89,6 @@ public class Title : MonoBehaviour {
                         this.isStartedFadeIn = false;
                         int phase = 0;
                         this.phaseController.SendMessage("SetPhase", phase);
-                        UpDatePhase(0);
                         string flag = "START";
                         this.systemMessage.SendMessage("OnFlag", flag);
                     }
@@ -94,11 +103,6 @@ public class Title : MonoBehaviour {
             }
         }
 	}
-
-    void UpDatePhase(int phaseNumber) 
-    {
-        this.phase = phaseNumber;
-    }
 
     void BlinkStartText()
     {
