@@ -197,7 +197,8 @@ public class SystemMessage : MonoBehaviour {
             {
                 this.battleObject.transform.localPosition = this.topPoint;
                 this.startObject.transform.localPosition = this.bottomPoint;
-                this.phaseController.SendMessage("SetPhase", 1);
+                int phase = 1;
+                this.phaseController.SendMessage("SetPhase", phase);
                 this.messageFlag = "WAIT";
                 this.moveTimer = this.moveTime;
                 this.massageTimer = this.massageTime;

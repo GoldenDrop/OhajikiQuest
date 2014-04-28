@@ -85,7 +85,7 @@ public class PhaseControl : MonoBehaviour {
 
     void ResetTurns()
     {
-        this.playerTurn = 1;
+        this.playerTurn = 0;
         this.enemyTrun  = 0;
         this.turn.SendMessage("UpdteTurn", playerTurn);
     }

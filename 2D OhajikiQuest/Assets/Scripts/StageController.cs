@@ -42,9 +42,17 @@ public class StageController : MonoBehaviour {
         }
     }
 
-    void RestStageNumber()
+    void RetryStage()
+    {
+        Destroy(this.stage);
+        CreateStage();
+    }
+
+    void RestStage()
     {
         this.stageNumber = 1;
+        Destroy(this.stage);
+        CreateStage();
     }
 
     void SendToResultClearStage()
