@@ -13,10 +13,6 @@ public class SystemMessage : MonoBehaviour {
 
     string messageFlag = "WAIT";
 
-    bool clearFlag    = false;
-    bool gameOverFlag = false;
-    bool battleStartFlag = false;
-
     float moveTimer;
     float moveTime = 2.0f;
     float moveSpeed = 2.8f;
@@ -69,7 +65,6 @@ public class SystemMessage : MonoBehaviour {
         this.fadeOutTimer = this.fadeOutInterval;
         this.fadeInTimer = this.fadeInInterval;
         this.massageTimer = this.massageTime;
-        //this.clearFlag = true;
 	}
 	
 	void Update () 
@@ -161,6 +156,7 @@ public class SystemMessage : MonoBehaviour {
             {
                 if (!this.isStartedFadeIn)
                 {
+                    this.magicCircle.SendMessage("InitializedPlayer");
                     this.defenceObject.transform.localPosition = this.topPoint;
                     this.failureObject.transform.localPosition = this.bottomPoint;
                     string place = "GAMEOVER";
@@ -179,7 +175,7 @@ public class SystemMessage : MonoBehaviour {
                     this.fadeInTimer = this.fadeInInterval;
                     int phase = 4;
                     this.phaseController.SendMessage("SetPhase", phase);
-                    this.messageFlag = "WAITSS";
+                    this.messageFlag = "WAIT";
                 }
             }
 

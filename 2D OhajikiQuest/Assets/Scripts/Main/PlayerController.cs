@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour {
     public float minLength = 0.5f;
     public float maxLength = 3.5f;
 
-    // フェイズ 0:待機 1:Player 2:敵 
+    // フェイズ 0:待機 1:Player 2:敵 3:Title 4:GameOver 5:Result
     int phase = 0;
 
 
@@ -139,6 +139,8 @@ public class PlayerController : MonoBehaviour {
     {
         Debug.Log("Initialization Player");
         this.playerOrb.SendMessage("MoveToFirstPosition");
+        float turnAngle = 0;
+        this.infomation.SendMessage("Turn", turnAngle);
         this.yusha.SendMessage("OffFlags");
         this.isMoving = false;
         this.isPulled = false;
