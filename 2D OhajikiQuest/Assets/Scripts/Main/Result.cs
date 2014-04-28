@@ -28,15 +28,20 @@ public class Result : MonoBehaviour {
     void CatchScore(int score)
     {
         this.resultScore = score;
+        Debug.Log("Result SCORE : " + this.resultScore);
     }
 
     void CatchTotalTurn(int turn)
     {
         this.resultTotalTurn = turn;
+        Debug.Log("Result TOTAL TURN : " + this.resultTotalTurn);
+
     }
 
     void CatchClearStage(int stage)
     {
         this.claerStage = stage;
+        Debug.Log("Result CLEAR STAGE : " + this.claerStage);
+
     }
 }

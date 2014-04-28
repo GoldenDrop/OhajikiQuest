@@ -86,6 +86,47 @@ public class GameOver : MonoBehaviour {
     {
         // Rsultに値を送る　Score, TtalTurn ClearStage
         // 初期化　Score,PlayerTurn,EnemyTurn,TotalTurn,StageNumber
+        this.fadeOutTimer -= Time.deltaTime;
+        if (!this.isStartedFadeOut)
+        {
+            float fadeOutSpeed = 0.7f;
+            this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
+            this.isStartedFadeOut = true;
+        }
+
+        if (this.fadeOutTimer < 0)
+        {
+            Debug.Log("Retry FadeInStart");
+            if (!this.isStartedFadeIn)
+            {
+                string place = "RESULT";
+                this.mainCamera.SendMessage("Move", place);
+                // 値をResultに送る
+                this.score.SendMessage("SendToResultScore");
+                this.stageController.SendMessage("SendToResultClearStage");
+                this.phaseController.SendMessage("SendToResultTotalTurn");
+
+                // 初期化　Score,PlayerTurn, EnemyTurn, TotalTurn ステージ削除・作成
+                this.phaseController.SendMessage("ResetTurns");
+                this.phaseController.SendMessage("ResetTotalTurn");
+                this.score.SendMessage("ResetScore");
+                this.stageController.SendMessage("RestStage");
+                float fadeInSpeed = 0.7f;
+                this.fadeManager.SendMessage("OnFadeInFlag", fadeInSpeed);
+                this.isStartedFadeIn = true;
+            }
+            this.fadeInTimer -= Time.deltaTime;
+            if (this.fadeInTimer < 0)
+            {
+                int phase = 5;
+                this.phaseController.SendMessage("SetPhase", phase);
+                this.fadeOutTimer = this.fadeOutInterval;
+                this.fadeInTimer = this.fadeInInterval;
+                this.onExit = false;
+                this.isStartedFadeOut = false;
+                this.isStartedFadeIn = false;
+            }
+        }
        
     }
 
