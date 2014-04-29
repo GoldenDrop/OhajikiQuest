@@ -29,15 +29,12 @@ public class Score : MonoBehaviour {
     void ScoreToGameObject()
     {
         DestroyNumbers();
-        //string scoreString = this.score.ToString();
         string scoreString = string.Format("{0:D5}", this.score);
         
-        //Debug.Log("scoreString.Length" + scoreString.Length);
         for (int i = 0; i < scoreString.Length; i++)
         {
             // i桁の数字を取る
             string number = scoreString.Substring((scoreString.Length - 1) - i, 1);
-            //Debug.Log("number" + number);
             CreateNumber(i + 1, number);
         }
 
@@ -66,22 +63,27 @@ public class Score : MonoBehaviour {
             case 1:
                 onePrefab = Resources.Load(path) as GameObject;
                 this.oneDigit = Instantiate(onePrefab, firstPoint, Quaternion.identity) as GameObject;
+                this.oneDigit.transform.parent = gameObject.transform;
                 break;
             case 2:
                 twoPrefab = Resources.Load(path) as GameObject;
                 this.twoDigit = Instantiate(twoPrefab, firstPoint - new Vector2(xOffset, 0), Quaternion.identity) as GameObject;
+                this.twoDigit.transform.parent = gameObject.transform;
                 break;
             case 3:
                 threePrefab = Resources.Load(path) as GameObject;
                 this.threeDigit = Instantiate(threePrefab, firstPoint - new Vector2(2 * xOffset, 0), Quaternion.identity) as GameObject;
+                this.threeDigit.transform.parent = gameObject.transform;
                 break;
             case 4:
                 fourPrefab = Resources.Load(path) as GameObject;
                 this.fourDigit = Instantiate(fourPrefab, firstPoint - new Vector2(3 * xOffset, 0), Quaternion.identity) as GameObject;
+                this.fourDigit.transform.parent = gameObject.transform;
                 break;
             case 5:
                 fivePrefab = Resources.Load(path) as GameObject;
                 this.fiveDigit = Instantiate(fivePrefab, firstPoint - new Vector2(4 * xOffset, 0), Quaternion.identity) as GameObject;
+                this.fiveDigit.transform.parent = gameObject.transform;
                 break;
         }
     }
