@@ -5,11 +5,12 @@ public class Enemy : MonoBehaviour {
 
     public GameObject hpBarPrefab;
     public int point = 50;
-    public int maxHP = 4;
-    public float hpBarW = 0.15f;
-    public float hpBarH = 0.10f;
-    public float xOffset = 0.03f;
-    public float yOffset = 0.05f;
+    public int maxHP = 1;
+    public float hpBarOffset = 0.5f;
+    float hpBarW = 0.15f;
+    float hpBarH = 0.10f;
+    float xOffset = 0.03f;
+    float yOffset = 0.05f;
 
     int hp;
 
@@ -37,7 +38,7 @@ public class Enemy : MonoBehaviour {
 
     void CreateHPBar()
     {
-        Vector2 firstPoint = new Vector2(transform.position.x - (this.hpBarW * 2 + this.xOffset * 2), 0.4f + transform.position.y);//0.3f);
+        Vector2 firstPoint = new Vector2(transform.position.x - (this.hpBarW * 2 + this.xOffset * 2), transform.position.y + hpBarOffset);
 
         for (int i = 0; i < this.maxHP; i++)
         {
