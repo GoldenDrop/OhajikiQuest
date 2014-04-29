@@ -145,6 +145,10 @@ public class Result : MonoBehaviour {
     void CatchTotalTurn(int turn)
     {
         this.resultTotalTurn = turn;
+        if (turn > 99)
+        {
+            this.resultTotalTurn = 99;
+        }
         //Debug.Log("Result TOTAL TURN : " + this.resultTotalTurn);
         TurnToGameObject();
 

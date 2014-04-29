@@ -14,6 +14,7 @@ public class GameOver : MonoBehaviour {
     GetPhase getPhase; // 現行フェイズ取得クラス
     Transform score;
 
+
     float fadeOutTimer;
     float fadeOutInterval = 1.5f;
     float fadeInTimer;
@@ -103,7 +104,8 @@ public class GameOver : MonoBehaviour {
                 this.mainCamera.SendMessage("Move", place);
                 // 値をResultに送る
                 this.score.SendMessage("SendToResultScore");
-                this.stageController.SendMessage("SendToResultClearStage");
+                string from = "GAMEOVER";
+                this.stageController.SendMessage("SendToResultClearStage", from);
                 this.phaseController.SendMessage("SendToResultTotalTurn");
 
                 // 初期化　Score,PlayerTurn, EnemyTurn, TotalTurn ステージ削除・作成

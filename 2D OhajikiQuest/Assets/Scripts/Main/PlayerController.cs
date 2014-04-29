@@ -28,13 +28,17 @@ public class PlayerController : MonoBehaviour {
     // フェイズ 0:待機 1:Player 2:敵 3:Title 4:GameOver 5:Result
     int phase = 0;
 
+    void Awake()
+    {
+        CreatePlayer();
+    }
 
     void Start()
     {
         this.getPhase = gameObject.GetComponent<GetPhase>();
         this.magicPowerBar = GameObject.FindWithTag("MagicPowerBar");
         this.infomation = gameObject.transform.Find("Infomation");
-        CreatePlayer();
+        //CreatePlayer();
         this.yusha = gameObject.transform.Find("PlayerOrb(Clone)/Yusha");
         
 

@@ -59,13 +59,13 @@ public class Enemy : MonoBehaviour {
         if (this.hp > 0)
         {
             Destroy(transform.GetChild(this.hp - 1).gameObject);
-            --hp;
+            --this.hp;
         }
         
         if (this.hp == 0)
         {
             Destroy(gameObject);
-            this.player.SendMessage("OnClearFlag");
+            //this.player.SendMessage("OnClearFlag");
             this.gameController.SendMessage("UpdateEnemyCount");
             this.score.SendMessage("UpdateScore", this.point);
         }

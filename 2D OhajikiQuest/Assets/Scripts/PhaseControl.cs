@@ -67,9 +67,11 @@ public class PhaseControl : MonoBehaviour {
 
     void Update()
     {
+        //Debug.Log("Now Phase : " + this.phase);
         if (this.phase == 2)
         {
             this.enemyTime -= Time.deltaTime;
+            Debug.Log("enemyTime : " + this.enemyTime);
             if (this.enemyTime < 0)
             {
                 this.magicCircle.SendMessage("InitializedPlayer");
@@ -94,5 +96,11 @@ public class PhaseControl : MonoBehaviour {
     void SendToResultTotalTurn()
     {
         this.result.SendMessage("CatchTotalTurn", this.totalTurn);
+    }
+
+    void Catch()
+    {
+
+        Debug.Log("Catch");
     }
 }

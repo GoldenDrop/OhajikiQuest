@@ -4,6 +4,7 @@ using System.Collections;
 public class StageController : MonoBehaviour {
 
     int stageNumber = 1;
+    int lastStageNumber = 2;
     GameObject stage;
     GameObject gameController;
     GameObject result;
@@ -18,7 +19,7 @@ public class StageController : MonoBehaviour {
 
     void CreateStage()
     {
-        string path = "Prefabs/Stage/" + this.stageNumber;
+        string path = "Prefabs/Stage/STAGE" + this.stageNumber;
         Debug.Log("path : " + path);
         GameObject stagePrefab = Resources.Load(path) as GameObject;
         this.stage = Instantiate(stagePrefab, new Vector2(10.0f, 0), Quaternion.identity) as GameObject;
@@ -30,16 +31,15 @@ public class StageController : MonoBehaviour {
     void NextStage()
     {
         this.stageNumber++;
-        this.stageNumber = 1; // Debug
-        if (this.stageNumber < 7)
+        Debug.Log("Next Stage : " + this.stageNumber);
+        //this.stageNumber = 1; // Debug
+        if (this.stageNumber == this.lastStageNumber)
         {
-            Destroy(this.stage);
-            CreateStage();
+            Debug.Log("Next Last Stage. OnLastStageFlag");
+            this.gameController.SendMessage("OnLastStageFlag");
         }
-        else
-        {
-            Debug.Log("this.stageNumber Erorr.");
-        }
+        Destroy(this.stage);
+        CreateStage();
     }
 
     void RetryStage()
@@ -55,9 +55,15 @@ public class StageController : MonoBehaviour {
         CreateStage();
     }
 
-    void SendToResultClearStage()
+    void SendToResultClearStage(string from)
     {
-        int clearStage = this.stageNumber - 1;
+        int clearStage = this.stageNumber;
+        switch (from)
+        {
+            case "GAMEOVER":
+                clearStage--;
+                break;
+        }
         this.result.SendMessage("CatchClearStage", clearStage);
     }
 

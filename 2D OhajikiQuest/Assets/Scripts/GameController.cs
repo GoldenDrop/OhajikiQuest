@@ -4,13 +4,17 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
     int enemyCount;
+    int sendPhase = 0;
     GameObject stageController;
-    bool clearFloag = false;
     float waitTimer;
     float waitTime = 3.5f;
     GameObject phaseController;
     GameObject systemMessage;
+    GameObject player;
+    // WAIT : 待機, CLEAR : ステージクリア, GAMEOVER : ゲームオーバー, GAMECLEAR : ゲームクリア
     string eventFlag = "WAIT";
+    string sendFlag = "";
+    bool isLastStage = false;
     
 
 
@@ -19,6 +23,7 @@ public class GameController : MonoBehaviour {
         this.stageController = GameObject.FindWithTag("StageController");
         this.phaseController = GameObject.FindWithTag("PhaseController");
         this.systemMessage   = GameObject.FindWithTag("SystemMessage");
+        this.player          = GameObject.FindWithTag("Player");
         this.waitTimer = this.waitTime;
     }
 
@@ -30,10 +35,10 @@ public class GameController : MonoBehaviour {
                 this.waitTimer -= Time.deltaTime;
                 if (this.waitTimer < 0)
                 {
-                    int phase = 0;
-                    this.phaseController.SendMessage("SetPhase", phase);
-                    string flag = "CLEAR";
-                    this.systemMessage.SendMessage("OnFlag", flag);
+                    this.sendPhase = 0;
+                    this.phaseController.SendMessage("SetPhase", this.sendPhase);
+                    this.sendFlag = "CLEAR";
+                    this.systemMessage.SendMessage("OnFlag", this.sendFlag);
                     this.eventFlag = "WAIT";
                     this.waitTimer = this.waitTime;
                 }
@@ -41,11 +46,25 @@ public class GameController : MonoBehaviour {
 
             case "GAMEOVER":
                 Debug.Log("Flag = GAMEOVER");
-                int phase = 0;
-                this.phaseController.SendMessage("SetPhase", phase);
-                string flag = "GAMEOVER";
-                this.systemMessage.SendMessage("OnFlag", flag);
+                this.sendPhase = 0;
+                this.phaseController.SendMessage("SetPhase", this.sendPhase);
+                this.sendFlag = "GAMEOVER";
+                this.systemMessage.SendMessage("OnFlag", this.sendFlag);
                 this.eventFlag = "WAIT";
+                break;
+
+            case "GAMECLEAR":
+                this.waitTimer -= Time.deltaTime;
+                if (this.waitTimer < 0)
+                {
+                    this.sendPhase = 0;
+                    this.phaseController.SendMessage("SetPhase", this.sendPhase);
+                    this.sendFlag = "GAMECLEAR";
+                    this.systemMessage.SendMessage("OnFlag", this.sendFlag);
+                    this.eventFlag = "WAIT";
+                    this.isLastStage = false;
+                    this.waitTimer = this.waitTime;
+                }
                 break;
         }
     }
@@ -62,8 +81,17 @@ public class GameController : MonoBehaviour {
         Debug.Log("<UpdateEnemyCount> Enemy Count : " + this.enemyCount);
         if (this.enemyCount == 0)
         {
-            Debug.Log("GoNextStage");
-            this.eventFlag = "CLEAR";
+            this.player.SendMessage("OnClearFlag");
+
+            if (this.isLastStage)
+            {
+                this.eventFlag = "GAMECLEAR";
+            }
+            else
+            {
+                this.eventFlag = "CLEAR";
+
+            }
         }
     }
 
@@ -77,5 +105,10 @@ public class GameController : MonoBehaviour {
     {
         this.eventFlag = "GAMEOVER";
         Debug.Log("GameOver");
+    }
+
+    void OnLastStageFlag()
+    {
+        this.isLastStage = true;
     }
 }

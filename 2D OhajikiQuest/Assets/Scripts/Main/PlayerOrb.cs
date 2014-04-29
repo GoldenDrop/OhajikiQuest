@@ -58,7 +58,6 @@ public class PlayerOrb : MonoBehaviour {
                 gameObject.rigidbody2D.velocity = Vector2.zero;
                 if (!this.isStoped)
                 {
-                    //gameObject.rigidbody2D.velocity = Vector2.zero;
                     gameObject.rigidbody2D.fixedAngle = true;
                     gameObject.rigidbody2D.fixedAngle = false;
                     this.circleCollider.isTrigger = true;
@@ -73,18 +72,20 @@ public class PlayerOrb : MonoBehaviour {
                 {
                     // アニメーションが変わるまで待機
                     this.waitTimer -= Time.deltaTime;
-                    //Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
+                    Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
                     if (this.waitTimer < 0)
                     {
                         if (!isClear)
                         {
-                            this.phaseController.SendMessage("SetPhase", 2);
+                            Debug.Log("************************************** Send Phase 2 **********************************");
+                            int sendPhase = 2;
+                            this.phaseController.SendMessage("SetPhase", sendPhase);
                         }
-                        this.waitTimer = this.waitInterval;
-                        this.moveTimer = this.moveInterval;
                         this.isMoving = false;
                         this.isStoped = false;
                         this.isClear = false;
+                        this.waitTimer = this.waitInterval;
+                        this.moveTimer = this.moveInterval;
                     }
                 }
             }
@@ -113,6 +114,7 @@ public class PlayerOrb : MonoBehaviour {
     void OnClearFlag()
     {
         this.isClear = true;
+        Debug.Log("On ClearFlag");
     }
 }
 
