@@ -3,19 +3,16 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
-    public GameObject hpBarPrefab;
     public int point = 50;
-    public int maxHP = 1;
-    public float hpBarOffset = 0.5f;
+    public float maxHP = 1.0f;
     public GameObject hitPrefab;
     public GameObject explosionPrefab;
 
-    float hpBarW = 0.15f;
-    float hpBarH = 0.10f;
-    float xOffset = 0.03f;
-    float yOffset = 0.05f;
+    float xOffset = 0.5f;
 
-    int hp;
+    Vector3 hpBarFirstScale;
+
+    float hp;
 
     GameObject gameController;
     GameObject player;
@@ -24,6 +21,7 @@ public class Enemy : MonoBehaviour {
 
 
     Transform score;
+    Transform hpBarRed;
 
 
 	void Start () 
@@ -33,32 +31,17 @@ public class Enemy : MonoBehaviour {
         this.player = GameObject.FindWithTag("Player");
         this.gui = GameObject.FindWithTag("GUI");
         this.score = this.gui.transform.Find("BottomBord/SCORE");
+        this.hpBarRed = gameObject.transform.Find("HpBar/HpBarRed");
+        this.hpBarFirstScale = this.hpBarRed.localScale;
+        Debug.Log("hpBarFirstScale : " + this.hpBarFirstScale.x + ", " + this.hpBarFirstScale.y + ", " + this.hpBarFirstScale.z);
+
         this.hp = maxHP;
-        CreateHPBar();
 	}
 	
 	void Update () {
 	
 	}
 
-    void CreateHPBar()
-    {
-        Vector2 firstPoint = new Vector2(transform.position.x - (this.hpBarW * 2 + this.xOffset * 2), transform.position.y + hpBarOffset);
-
-        for (int i = 0; i < this.maxHP; i++)
-        {
-            int row = Mathf.FloorToInt(i / 4);
-            int col = i;
-            if (row > 0) // 2段目以降
-            {
-                col = i - row * 4;
-            }
-
-            Vector2 nextPoint = new Vector2(col * (this.hpBarW + this.xOffset), row * (this.hpBarH + this.yOffset));
-            GameObject hp = Instantiate(hpBarPrefab, firstPoint + nextPoint, Quaternion.identity) as GameObject;
-            hp.transform.parent = gameObject.transform;
-        }
-    }
 
     void ReceivedDamage()
     {
@@ -68,9 +51,9 @@ public class Enemy : MonoBehaviour {
         {
             effect = this.hitPrefab;
             se = "Hit1";
-            
-            Destroy(transform.GetChild(this.hp - 1).gameObject);
             --this.hp;
+            float n = this.hp / this.maxHP;
+            this.hpBarRed.localScale = new Vector3(this.hpBarFirstScale.x * (this.hp / this.maxHP), this.hpBarFirstScale.y, this.hpBarFirstScale.z);
         }
         
     
