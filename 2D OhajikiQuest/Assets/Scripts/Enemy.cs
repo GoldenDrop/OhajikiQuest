@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour {
     public int point = 50;
     public int maxHP = 1;
     public float hpBarOffset = 0.5f;
+    public GameObject hitPrefab;
+    public GameObject explosionPrefab;
+
     float hpBarW = 0.15f;
     float hpBarH = 0.10f;
     float xOffset = 0.03f;
@@ -17,6 +20,7 @@ public class Enemy : MonoBehaviour {
     GameObject gameController;
     GameObject player;
     GameObject gui;
+    GameObject seManager;
 
 
     Transform score;
@@ -24,6 +28,7 @@ public class Enemy : MonoBehaviour {
 
 	void Start () 
     {
+        this.seManager = GameObject.FindWithTag("SEManager");
         this.gameController = GameObject.FindWithTag("GameController");
         this.player = GameObject.FindWithTag("Player");
         this.gui = GameObject.FindWithTag("GUI");
@@ -57,19 +62,30 @@ public class Enemy : MonoBehaviour {
 
     void ReceivedDamage()
     {
+        GameObject effect = null;
+        string se = "";
         if (this.hp > 0)
         {
+            effect = this.hitPrefab;
+            se = "Hit1";
+            
             Destroy(transform.GetChild(this.hp - 1).gameObject);
             --this.hp;
         }
         
+    
         if (this.hp == 0)
         {
+            effect = this.explosionPrefab;
+            se = "Explosion1";
             Destroy(gameObject);
             //this.player.SendMessage("OnClearFlag");
             this.gameController.SendMessage("UpdateEnemyCount");
             this.score.SendMessage("UpdateScore", this.point);
         }
+
+        Instantiate(effect, transform.position, Quaternion.identity);
+        this.seManager.SendMessage("Play", se);
     }
 
     void OnCollisionEnter2D(Collision2D hit)
