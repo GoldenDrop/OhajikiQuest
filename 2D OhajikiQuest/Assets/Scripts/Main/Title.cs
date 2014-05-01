@@ -7,6 +7,8 @@ public class Title : MonoBehaviour {
     GameObject systemMessage;
     GameObject fadeManager;
     GameObject mainCamera;
+    GameObject seManager;
+
 
     Transform titleText;
     Transform startText;
@@ -34,6 +36,7 @@ public class Title : MonoBehaviour {
         this.mainCamera      = GameObject.FindWithTag("MainCamera");
         this.systemMessage   = GameObject.FindWithTag("SystemMessage");
         this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.seManager       = GameObject.FindWithTag("SEManager");
 
         this.titleText       = gameObject.transform.Find("TitleText");
         this.startText       = gameObject.transform.Find("StartText");
@@ -62,6 +65,8 @@ public class Title : MonoBehaviour {
                 this.fadeOutTimer -= Time.deltaTime;
                 if (!this.isStartedFadeOut)
                 {
+                    string se = "TitleClick";
+                    this.seManager.SendMessage("Play", se);
                     float fadeOutSpeed = 0.7f;
                     this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
                     this.isStartedFadeOut = true;

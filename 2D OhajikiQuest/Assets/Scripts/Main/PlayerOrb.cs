@@ -6,6 +6,8 @@ public class PlayerOrb : MonoBehaviour {
     public int FORCE = 500;
 
     GameObject phaseController;
+    GameObject seManager;
+
     SpriteRenderer orbRenderer;
     CircleCollider2D circleCollider;
     Color orbColor;
@@ -34,6 +36,8 @@ public class PlayerOrb : MonoBehaviour {
         this.circleCollider = GetComponent<CircleCollider2D>();
 
         this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.seManager       = GameObject.FindWithTag("SEManager");
+
         this.moveTimer = this.moveInterval;
         this.waitTimer = this.waitInterval;
         this.minAngle = -90 + limitAngle;
@@ -115,6 +119,19 @@ public class PlayerOrb : MonoBehaviour {
     {
         this.isClear = true;
         Debug.Log("On ClearFlag");
+    }
+
+    void OnCollisionEnter2D(Collision2D hit)
+    {
+        Debug.Log("Player Hit");
+        switch (hit.gameObject.tag)
+        {
+            case "Wall":
+            case "GUI":
+                string se = "HitWall";
+                this.seManager.SendMessage("Play", se);
+                break;
+        }
     }
 }
 

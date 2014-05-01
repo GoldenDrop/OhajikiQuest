@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour {
     public GameObject playerPrefab;
     GameObject playerOrb;
     GameObject magicPowerBar;
+    GameObject seManager;
+
     Transform yusha;
     Transform infomation;
     GetPhase getPhase;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour {
     {
         this.getPhase = gameObject.GetComponent<GetPhase>();
         this.magicPowerBar = GameObject.FindWithTag("MagicPowerBar");
+        this.seManager = GameObject.FindWithTag("SEManager");
         this.infomation = gameObject.transform.Find("Infomation");
         //CreatePlayer();
         this.yusha = gameObject.transform.Find("PlayerOrb(Clone)/Yusha");
@@ -119,8 +122,12 @@ public class PlayerController : MonoBehaviour {
             Debug.Log("Mouse Left Button Up");
             this.isPulled = false;
             this.isMoving = true;
+            // SE開始
+            string se = "Go";
+            this.seManager.SendMessage("Play", se);
             float infoAlpha = 0;
             this.infomation.SendMessage("ChangeTransparency", infoAlpha);
+            
             // Standアニメーション開始
             this.yusha.SendMessage("Stand", true);
             this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);

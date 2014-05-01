@@ -8,6 +8,8 @@ public class GameOver : MonoBehaviour {
     GameObject mainCamera;
     GameObject gui;
     GameObject systemMessage;
+    GameObject seManager;
+
 
     RaycastHit2D hit;
     int phase = 0;
@@ -35,6 +37,8 @@ public class GameOver : MonoBehaviour {
         this.mainCamera      = GameObject.FindWithTag("MainCamera");
         this.systemMessage   = GameObject.FindWithTag("SystemMessage");
         this.gui             = GameObject.FindWithTag("GUI");
+        this.seManager       = GameObject.FindWithTag("SEManager");
+
         this.score           = this.gui.transform.Find("BottomBord/SCORE");
         this.fadeOutTimer    = this.fadeOutInterval;
         this.fadeInTimer     = this.fadeInInterval;
@@ -77,6 +81,8 @@ public class GameOver : MonoBehaviour {
                                 this.onRetry = true;
                                 break;
                         }
+                        string se = "Click";
+                        this.seManager.SendMessage("Play", se);
                     }
                 }
             }

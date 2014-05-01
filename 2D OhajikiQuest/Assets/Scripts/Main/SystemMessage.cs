@@ -12,6 +12,7 @@ public class SystemMessage : MonoBehaviour {
     Transform startObject;
     Transform GAMEObject;
 
+
     string messageFlag = "WAIT";
 
     float moveTimer;
@@ -24,6 +25,8 @@ public class SystemMessage : MonoBehaviour {
     GameObject mainCamera;
     GameObject magicCircle;
     GameObject gui;
+    GameObject seManager;
+
 
     float fadeOutTimer;
     float fadeOutInterval = 1.5f;
@@ -48,6 +51,8 @@ public class SystemMessage : MonoBehaviour {
         this.mainCamera      = GameObject.FindWithTag("MainCamera");
         this.magicCircle     = GameObject.FindWithTag("MagicCircle");
         this.gui             = GameObject.FindWithTag("GUI");
+        this.seManager       = GameObject.FindWithTag("SEManager");
+
 
         this.score         = this.gui.transform.Find("BottomBord/SCORE");
         this.stageObject   = gameObject.transform.Find("STAGE");
@@ -204,6 +209,8 @@ public class SystemMessage : MonoBehaviour {
             this.massageTimer -= Time.deltaTime;
             if (this.massageTimer < 0)
             {
+                string se = "Alert";
+                this.seManager.SendMessage("Play", se);
                 this.battleObject.transform.localPosition = this.topPoint;
                 this.startObject.transform.localPosition = this.bottomPoint;
                 int phase = 1;
@@ -279,5 +286,22 @@ public class SystemMessage : MonoBehaviour {
     {
         Debug.Log("messageFlag = " + flag);
         this.messageFlag = flag;
+        string se = "";
+        switch (this.messageFlag)
+        {
+            case "CLEAR":
+                se = "StageClear";
+                break;
+
+            case "GAMEOVER":
+                se = "GameOver";
+                break;
+
+            case "GAMECLEAR":
+                se = "GameClear";
+                break;   
+        }
+        
+        this.seManager.SendMessage("Play", se);
     }
 }

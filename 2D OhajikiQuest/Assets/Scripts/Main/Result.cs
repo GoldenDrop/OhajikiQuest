@@ -15,6 +15,8 @@ public class Result : MonoBehaviour {
     GameObject mainCamera;
     GameObject phaseController;
     GameObject title;
+    GameObject seManager;
+
 
     float fadeOutTimer;
     float fadeOutInterval = 1.5f;
@@ -59,6 +61,7 @@ public class Result : MonoBehaviour {
         this.mainCamera = GameObject.FindWithTag("MainCamera");
         this.phaseController = GameObject.FindWithTag("PhaseController");
         this.title = GameObject.FindWithTag("Title");
+        this.seManager = GameObject.FindWithTag("SEManager");
 
         this.stageText = gameObject.transform.Find("STAGE");
         this.trunText = gameObject.transform.Find("TURN");
@@ -102,6 +105,8 @@ public class Result : MonoBehaviour {
         this.fadeOutTimer -= Time.deltaTime;
         if (!this.isStartedFadeOut)
         {
+            string se = "Click";
+            this.seManager.SendMessage("Play", se);
             float fadeOutSpeed = 0.7f;
             this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
             this.isStartedFadeOut = true;

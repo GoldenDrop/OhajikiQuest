@@ -15,6 +15,7 @@ public class SE : MonoBehaviour {
 	
     void Play(string selectSE)
     {
+        Debug.Log("Selected : " + selectSE);
         string sePath = this.path + selectSE;
         this.audioClip = Resources.Load(sePath) as AudioClip;
         audioSource.clip = audioClip;
