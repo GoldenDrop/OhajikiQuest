@@ -8,6 +8,8 @@ public class Title : MonoBehaviour {
     GameObject fadeManager;
     GameObject mainCamera;
     GameObject seManager;
+    GameObject bgmPlayer;
+
 
 
     Transform titleText;
@@ -37,6 +39,7 @@ public class Title : MonoBehaviour {
         this.systemMessage   = GameObject.FindWithTag("SystemMessage");
         this.phaseController = GameObject.FindWithTag("PhaseController");
         this.seManager       = GameObject.FindWithTag("SEManager");
+        this.bgmPlayer       = GameObject.FindWithTag("BGMPlayer");
 
         this.titleText       = gameObject.transform.Find("TitleText");
         this.startText       = gameObject.transform.Find("StartText");
@@ -44,6 +47,9 @@ public class Title : MonoBehaviour {
         this.blinkTimer      = this.blinkInterval;
         this.fadeOutTimer    = this.fadeOutInterval;
         this.fadeInTimer     = this.fadeInInterval;
+
+        string bgm = "TITLE";
+        this.bgmPlayer.SendMessage("Play", bgm);
 	}
 	
 	void Update () 
@@ -67,6 +73,7 @@ public class Title : MonoBehaviour {
                 {
                     string se = "TitleClick";
                     this.seManager.SendMessage("Play", se);
+                    this.bgmPlayer.SendMessage("Stop");
                     float fadeOutSpeed = 0.7f;
                     this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
                     this.isStartedFadeOut = true;

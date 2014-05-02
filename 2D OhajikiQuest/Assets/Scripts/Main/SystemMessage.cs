@@ -14,7 +14,9 @@ public class SystemMessage : MonoBehaviour {
 
 
     string messageFlag = "WAIT";
+    string selectBGM = "";
 
+    int stageNumber = 1;
     float moveTimer;
     float moveTime = 2.0f;
     float moveSpeed = 2.8f;
@@ -26,7 +28,7 @@ public class SystemMessage : MonoBehaviour {
     GameObject magicCircle;
     GameObject gui;
     GameObject seManager;
-
+    GameObject bgmPlayer;
 
     float fadeOutTimer;
     float fadeOutInterval = 1.5f;
@@ -52,7 +54,7 @@ public class SystemMessage : MonoBehaviour {
         this.magicCircle     = GameObject.FindWithTag("MagicCircle");
         this.gui             = GameObject.FindWithTag("GUI");
         this.seManager       = GameObject.FindWithTag("SEManager");
-
+        this.bgmPlayer       = GameObject.FindWithTag("BGMPlayer");
 
         this.score         = this.gui.transform.Find("BottomBord/SCORE");
         this.stageObject   = gameObject.transform.Find("STAGE");
@@ -112,6 +114,7 @@ public class SystemMessage : MonoBehaviour {
             this.fadeOutTimer -= Time.deltaTime;
             if (!this.isStartedFadeOut)
             {
+                this.bgmPlayer.SendMessage("Stop");
                 float fadeOutSpeed = 0.7f;
                 this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
                 this.isStartedFadeOut = true;
@@ -161,6 +164,7 @@ public class SystemMessage : MonoBehaviour {
             this.fadeOutTimer -= Time.deltaTime;
             if (!this.isStartedFadeOut)
             {
+                this.bgmPlayer.SendMessage("Stop");
                 float fadeOutSpeed = 0.7f;
                 this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
                 this.isStartedFadeOut = true;
@@ -235,6 +239,7 @@ public class SystemMessage : MonoBehaviour {
             this.fadeOutTimer -= Time.deltaTime;
             if (!this.isStartedFadeOut)
             {
+                this.bgmPlayer.SendMessage("Stop");
                 float fadeOutSpeed = 0.7f;
                 this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
                 this.isStartedFadeOut = true;
@@ -268,6 +273,8 @@ public class SystemMessage : MonoBehaviour {
                 this.fadeInTimer -= Time.deltaTime;
                 if (this.fadeInTimer < 0)
                 {
+                    this.selectBGM = "RESULT";
+                    this.bgmPlayer.SendMessage("Play", this.selectBGM);
                     this.isStartedFadeOut = false;
                     this.isStartedFadeIn = false;
                     this.moveTimer = this.moveTime;
@@ -287,21 +294,62 @@ public class SystemMessage : MonoBehaviour {
         Debug.Log("messageFlag = " + flag);
         this.messageFlag = flag;
         string se = "";
+        float volume = 0;
+
         switch (this.messageFlag)
         {
             case "CLEAR":
                 se = "StageClear";
+                volume = 0.05f;
                 break;
 
             case "GAMEOVER":
                 se = "GameOver";
+                volume = 0.05f;
                 break;
 
             case "GAMECLEAR":
                 se = "GameClear";
+                volume = 0.05f;
                 break;   
+            case "START":
+                this.selectBGM = SelectStageBGM(this.stageNumber);
+                this.bgmPlayer.SendMessage("Play", this.selectBGM);
+                volume = 0.2f;
+                break;
         }
-        
+
+        this.bgmPlayer.SendMessage("SetVolume", volume);
         this.seManager.SendMessage("Play", se);
+    }
+
+    void CatchStageNumber(int number)
+    {
+        this.stageNumber = number;
+    }
+
+    string SelectStageBGM(int stage)
+    {
+        string bgm = "";
+        switch (stage)
+        {
+            case 1:
+                bgm = "STAGE1";
+                break;
+            case 2:
+                bgm = "STAGE2";
+                break;
+            case 3:
+                bgm = "STAGE3";
+                break;
+            case 4:
+                bgm = "STAGE4";
+                break;
+            case 5:
+                bgm = "LASTSTAGE";
+                break;
+        }
+
+        return bgm;
     }
 }

@@ -9,6 +9,7 @@ public class GameOver : MonoBehaviour {
     GameObject gui;
     GameObject systemMessage;
     GameObject seManager;
+    GameObject bgmPlayer;
 
 
     RaycastHit2D hit;
@@ -38,6 +39,7 @@ public class GameOver : MonoBehaviour {
         this.systemMessage   = GameObject.FindWithTag("SystemMessage");
         this.gui             = GameObject.FindWithTag("GUI");
         this.seManager       = GameObject.FindWithTag("SEManager");
+        this.bgmPlayer       = GameObject.FindWithTag("BGMPlayer");
 
         this.score           = this.gui.transform.Find("BottomBord/SCORE");
         this.fadeOutTimer    = this.fadeOutInterval;
@@ -126,6 +128,8 @@ public class GameOver : MonoBehaviour {
             this.fadeInTimer -= Time.deltaTime;
             if (this.fadeInTimer < 0)
             {
+                string selectBGM = "RESULT";
+                this.bgmPlayer.SendMessage("Play", selectBGM);
                 int phase = 5;
                 this.phaseController.SendMessage("SetPhase", phase);
                 this.fadeOutTimer = this.fadeOutInterval;

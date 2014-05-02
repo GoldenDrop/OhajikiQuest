@@ -8,12 +8,16 @@ public class StageController : MonoBehaviour {
     GameObject stage;
     GameObject gameController;
     GameObject result;
+    GameObject systemMessage;
+
     Transform enemyBox;
 
 	void Start () 
     {
         this.gameController = GameObject.FindWithTag("GameController");
         this.result = GameObject.FindWithTag("Result");
+        this.systemMessage = GameObject.FindWithTag("SystemMessage");
+
         CreateStage();
 	}
 
@@ -40,6 +44,7 @@ public class StageController : MonoBehaviour {
         }
         Destroy(this.stage);
         CreateStage();
+        this.systemMessage.SendMessage("CatchStageNumber", this.stageNumber);
     }
 
     void RetryStage()
