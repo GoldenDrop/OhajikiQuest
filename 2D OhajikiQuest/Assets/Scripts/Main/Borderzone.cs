@@ -11,18 +11,14 @@ public class Borderzone : MonoBehaviour {
         this.gameController = GameObject.FindWithTag("GameController");
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     void OnCollisionEnter2D(Collision2D hit)
     {
         Debug.Log("Borderzone hit");
         if (hit.gameObject.tag == "Enemy")
         {
-            Debug.Log("hit : Enemy");
             this.gameController.SendMessage("GameOver");
         }
+        
     }
 }

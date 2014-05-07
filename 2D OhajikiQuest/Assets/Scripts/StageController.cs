@@ -3,8 +3,9 @@ using System.Collections;
 
 public class StageController : MonoBehaviour {
 
-    int stageNumber = 1;
-    int lastStageNumber = 2;
+    int stageNumber     = 1;
+    int lastStageNumber = 4;
+
     GameObject stage;
     GameObject gameController;
     GameObject result;

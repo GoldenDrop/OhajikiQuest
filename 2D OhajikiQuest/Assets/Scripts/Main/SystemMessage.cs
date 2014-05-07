@@ -343,9 +343,6 @@ public class SystemMessage : MonoBehaviour {
                 bgm = "STAGE3";
                 break;
             case 4:
-                bgm = "STAGE4";
-                break;
-            case 5:
                 bgm = "LASTSTAGE";
                 break;
         }
