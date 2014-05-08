@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class GetPhase : MonoBehaviour {
-    GameObject phaseControl;
+    GameObject phaseController;
     PhaseControl phaseComponent;
 
 	void Start () 
     {
-        this.phaseControl = GameObject.FindWithTag("PhaseControl");
-        this.phaseComponent = this.phaseControl.GetComponent<PhaseControl>();
+        this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.phaseComponent = this.phaseController.GetComponent<PhaseControl>();
 	}
 
     public int GetNowPhase()
@@ -18,16 +18,16 @@ public class GetPhase : MonoBehaviour {
         return phaseNumber;
     }
 
-    public int GetPhaseNumber(string phaseCase)
+    public int GetTrunNumber(string phaseCase)
     {
         int getNumber = 0;
         switch (phaseCase)
         {
             case "Player" : // playerフェイス回数を取ってくる
-                getNumber = this.phaseComponent.GetPlayerPhaseNumber();
+                getNumber = this.phaseComponent.GetPlayerTrunNumber();
                 break;
             case "Enemy" : // enemyフェイス回数を取ってくる
-                getNumber = this.phaseComponent.GetEnemyPhaseNumber();
+                getNumber = this.phaseComponent.GetEnemyTurnNumber();
                 break;
         }
         return getNumber;

@@ -5,15 +5,20 @@ public class PlayerOrb : MonoBehaviour {
 
     public int FORCE = 500;
 
-    GameObject phaseControl;
-    SpriteRenderer renderer;
+    GameObject phaseController;
+    GameObject seManager;
+
+    SpriteRenderer orbRenderer;
+    CircleCollider2D circleCollider;
     Color orbColor;
     bool isMoving = false;
     bool isStoped = false;
+    bool isClear  = false;
+
     float moveTimer;
     float moveInterval = 3.0f;
     float waitTimer;
-    float waitInterval = 3.0f;
+    float waitInterval = 1.5f;
     float angle;
     public float limitAngle = 30.0f;
     float minAngle;
@@ -23,10 +28,16 @@ public class PlayerOrb : MonoBehaviour {
     Quaternion rotation;
     Transform yusha;
 
+    
+
     void Start()
     {
-        this.renderer = GetComponent<SpriteRenderer>();
-        this.phaseControl = GameObject.FindWithTag("PhaseControl");
+        this.orbRenderer    = GetComponent<SpriteRenderer>();
+        this.circleCollider = GetComponent<CircleCollider2D>();
+
+        this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.seManager       = GameObject.FindWithTag("SEManager");
+
         this.moveTimer = this.moveInterval;
         this.waitTimer = this.waitInterval;
         this.minAngle = -90 + limitAngle;
@@ -51,10 +62,9 @@ public class PlayerOrb : MonoBehaviour {
                 gameObject.rigidbody2D.velocity = Vector2.zero;
                 if (!this.isStoped)
                 {
-                    //gameObject.rigidbody2D.velocity = Vector2.zero;
                     gameObject.rigidbody2D.fixedAngle = true;
                     gameObject.rigidbody2D.fixedAngle = false;
-                    gameObject.rigidbody2D.isKinematic = true;
+                    this.circleCollider.isTrigger = true;
                     this.rotation.eulerAngles = Vector3.zero;
                     transform.rotation = rotation;
                     ChangeTransparency(0);
@@ -66,43 +76,29 @@ public class PlayerOrb : MonoBehaviour {
                 {
                     // アニメーションが変わるまで待機
                     this.waitTimer -= Time.deltaTime;
-                    //Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
+                    Debug.Log("waitTimer : " + waitTimer + ", " + Time.deltaTime);
                     if (this.waitTimer < 0)
                     {
-                        //Destroy(gameObject);
-                        this.phaseControl.SendMessage("SetPhase", 2);
-                        this.waitTimer = this.waitInterval;
-                        this.moveTimer = this.moveInterval;
+                        if (!isClear)
+                        {
+                            Debug.Log("************************************** Send Phase 2 **********************************");
+                            int sendPhase = 2;
+                            this.phaseController.SendMessage("SetPhase", sendPhase);
+                        }
                         this.isMoving = false;
                         this.isStoped = false;
+                        this.isClear = false;
+                        this.waitTimer = this.waitInterval;
+                        this.moveTimer = this.moveInterval;
                     }
                 }
             }
         }
     }
 
-    void GetAngle(float a)
-    {
-        this.angle = a;
-        /*
-        this.angle = Mathf.Atan2(delta.x, delta.y) * Mathf.Rad2Deg * -1;
-
-        // 角度制限
-        if (this.angle < this.minAngle)
-        {
-            this.angle = this.minAngle;
-        }
-        else if (this.angle > this.maxAngle)
-        {
-            this.angle = this.maxAngle;
-        }
-        //Debug.Log("(GetAngle) angle = " + this.angle + "°");
-         * */
-    }
-    
-
     void AddForceToOrb(Vector2 power)
     {
+        Debug.Log("AddForceToOrb");
         gameObject.rigidbody2D.AddForce(power * FORCE);
         this.isMoving = true;
     }
@@ -110,15 +106,32 @@ public class PlayerOrb : MonoBehaviour {
     void ChangeTransparency(float alpha) // 透明度変更
     {
         Color orbColor = new Color(1, 1, 1, alpha);
-        this.renderer.color = orbColor;
+        this.orbRenderer.color = orbColor;
     }
 
     void MoveToFirstPosition()
     {
-        //transform.localPosition = this.firstPosition;
         transform.localPosition = Vector2.zero;
-        gameObject.rigidbody2D.isKinematic = false;
+        this.circleCollider.isTrigger = false;
+    }
 
+    void OnClearFlag()
+    {
+        this.isClear = true;
+        Debug.Log("On ClearFlag");
+    }
+
+    void OnCollisionEnter2D(Collision2D hit)
+    {
+        Debug.Log("Player Hit");
+        switch (hit.gameObject.tag)
+        {
+            case "Wall":
+            case "GUI":
+                string se = "HitWall";
+                this.seManager.SendMessage("Play", se);
+                break;
+        }
     }
 }
 

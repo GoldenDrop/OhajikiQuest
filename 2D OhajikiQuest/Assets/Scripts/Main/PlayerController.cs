@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour {
     public GameObject playerPrefab;
     GameObject playerOrb;
     GameObject magicPowerBar;
+    GameObject seManager;
+
     Transform yusha;
     Transform infomation;
     GetPhase getPhase;
@@ -19,27 +21,27 @@ public class PlayerController : MonoBehaviour {
     Vector2 mousePoint;
     Vector2 deltaPoint;
 
-
-
-    float angle;
     public float limitAngle = 30.0f;
     float minAngle;
     float maxAngle;
     public float minLength = 0.5f;
     public float maxLength = 3.5f;
 
-
-
-
-
-    // フェイズ 0:待機 1:勇者 2:敵 
+    // フェイズ 0:待機 1:Player 2:敵 3:Title 4:GameOver 5:Result
     int phase = 0;
+
+    void Awake()
+    {
+        CreatePlayer();
+    }
+
     void Start()
     {
         this.getPhase = gameObject.GetComponent<GetPhase>();
         this.magicPowerBar = GameObject.FindWithTag("MagicPowerBar");
+        this.seManager = GameObject.FindWithTag("SEManager");
         this.infomation = gameObject.transform.Find("Infomation");
-        CreatePlayer();
+        //CreatePlayer();
         this.yusha = gameObject.transform.Find("PlayerOrb(Clone)/Yusha");
         
 
@@ -64,6 +66,10 @@ public class PlayerController : MonoBehaviour {
                     {
                         Debug.Log("Mouse Right Button Down");
                         this.magicPowerBar.SendMessage("ReleasedPower");
+                        float turnAngle = 0;
+                        this.infomation.SendMessage("Turn", turnAngle);
+                        float infoAlpha = 0;
+                        this.infomation.SendMessage("ChangeTransparency", infoAlpha);
                         InitializedPlayer();
                     }
                     Pull();
@@ -87,7 +93,7 @@ public class PlayerController : MonoBehaviour {
             float orbAlpha = 0.4f;
             this.playerOrb.SendMessage("ChangeTransparency", orbAlpha);
             // Infomation 表示　
-            float infoAlpha = 1.0f;
+            float infoAlpha = 0.7f;
             this.infomation.SendMessage("ChangeTransparency", infoAlpha);
         }
     }
@@ -116,13 +122,16 @@ public class PlayerController : MonoBehaviour {
             Debug.Log("Mouse Left Button Up");
             this.isPulled = false;
             this.isMoving = true;
+            // SE開始
+            string se = "Go";
+            this.seManager.SendMessage("Play", se);
             float infoAlpha = 0;
             this.infomation.SendMessage("ChangeTransparency", infoAlpha);
+            
             // Standアニメーション開始
             this.yusha.SendMessage("Stand", true);
             this.mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             this.deltaPoint = this.firstPoint - this.mousePoint;
-            //this.playerOrb.SendMessage("GetAngle", this.deltaPoint);   
             Vector2 power = GetDirection(this.deltaPoint) * GetMagnitude(this.deltaPoint); //  方向 * 長さ
             this.playerOrb.SendMessage("AddForceToOrb", power);
             this.magicPowerBar.SendMessage("ReleasedPower");
@@ -141,12 +150,11 @@ public class PlayerController : MonoBehaviour {
     {
         Debug.Log("Initialization Player");
         this.playerOrb.SendMessage("MoveToFirstPosition");
+        float turnAngle = 0;
+        this.infomation.SendMessage("Turn", turnAngle);
         this.yusha.SendMessage("OffFlags");
-        //this.yusha.SendMessage("MoveDown");
         this.isMoving = false;
         this.isPulled = false;
-        //this.infomation.SendMessage("ChangeTransparency", 0);
-        
     }
 
 
@@ -164,7 +172,7 @@ public class PlayerController : MonoBehaviour {
         {
             angle = this.maxAngle;
         }
-        //Debug.Log("(GetAngle) angle = " + this.angle + "°");
+        Debug.Log("(GetAngle) angle = " + angle + "°");
         return angle;
     }
 
@@ -181,7 +189,7 @@ public class PlayerController : MonoBehaviour {
         {
             magnitude = this.maxLength;
         }
-
+        Debug.Log("GetMagnitude magnitude : " + magnitude);
         return magnitude;
     }
 
@@ -189,47 +197,24 @@ public class PlayerController : MonoBehaviour {
     {
         Vector2 direction = delta.normalized; // ベクトルの長さを1にする
         float angle = GetAngle(delta);
+
         // 角度制限
         if (angle == this.minAngle)
         {
             // 与えるベクトルをminAngleのベクトルに変更する 計算上長さは1
             direction = new Vector2(Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
         }
-        else if (angle == this.maxAngle)
+        if (angle == this.maxAngle)
         {
             // 与えるベクトルをmaxAngleのベクトルに変更する　計算上長さは1
             direction = new Vector2(-Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
         }
+        if (angle == 0)
+        {
+            // 与えるベクトルを(1, 0)に変更する
+            direction = Vector2.up;
+        }
+        
         return direction;
     }
-
-    /*void AddForceToOrb(Vector2 delta)
-    {
-        Vector2 pull = delta.normalized; // ベクトルの長さを1にする
-
-        // 角度制限
-        if (this.angle == this.minAngle)
-        {
-            // 与えるベクトルをminAngleのベクトルに変更する
-            pull = new Vector2(Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
-        }
-        else if (this.angle == this.maxAngle)
-        {
-            // 与えるベクトルをmaxAngleのベクトルに変更する
-            pull = new Vector2(-Mathf.Cos(this.limitAngle * Mathf.Deg2Rad), Mathf.Sin(this.limitAngle * Mathf.Deg2Rad));
-        }
-        float magnitude = delta.magnitude; // 引っ張りの長さを取得
-        // 長さ制限
-        if (magnitude < this.minLength)
-        {
-            magnitude = this.minLength;
-        }
-        else if (magnitude > this.maxLength)
-        {
-            magnitude = this.maxLength;
-        }
-
-        gameObject.rigidbody2D.AddForce(pull * magnitude * FORCE);
-        this.isMoving = true;
-    }*/
 }

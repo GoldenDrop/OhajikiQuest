@@ -6,17 +6,14 @@ public class Turn : MonoBehaviour {
     int turn = 0;
     GameObject oneDigit;
     GameObject twoDigit;
-    GameObject resultScore;
 
     float xOffset = 0.125f;
     float yOffset = 0.35f;
 
 
-	void Start () {
-	    // Resultへの参照を追加予定
-        string n = "0";
-        CreateNumber(1, n);
-        CreateNumber(2, n);
+	void Start () 
+    {
+        TurnToGameObject();
 	}
 
     void UpdteTurn(int turnNumber)
@@ -56,10 +53,12 @@ public class Turn : MonoBehaviour {
             case 1:
                 onePrefab = Resources.Load(path) as GameObject;
                 this.oneDigit = Instantiate(onePrefab, oneDigitPoint, Quaternion.identity) as GameObject;
+                this.oneDigit.transform.parent = gameObject.transform;
                 break;
             case 2:
                 twoPrefab = Resources.Load(path) as GameObject;
                 this.twoDigit = Instantiate(twoPrefab, twoDigitPoint, Quaternion.identity) as GameObject;
+                this.twoDigit.transform.parent = gameObject.transform;
                 break;
         }
     }
