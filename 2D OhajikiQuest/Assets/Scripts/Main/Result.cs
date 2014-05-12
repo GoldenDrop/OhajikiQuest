@@ -7,7 +7,8 @@ public class Result : MonoBehaviour {
     int resultScore     = 0;
     int resultTotalTurn = 0;
     int claerStage      = 0;
-    int phase           = 0;
+
+    int phase;
 
     GetPhase getPhase; // 現行フェイズ取得クラス
 
@@ -27,6 +28,7 @@ public class Result : MonoBehaviour {
     bool isStartedFadeOut = false;
     bool isStartedFadeIn  = false;
     bool onOk             = false;
+    bool onClick          = false;
 
     RaycastHit2D hit;
 
@@ -76,7 +78,7 @@ public class Result : MonoBehaviour {
 	void Update () 
     {
         this.phase = this.getPhase.GetNowPhase();
-        if (this.phase == 5)
+        if (this.phase == (int)Phase.PresentPhase.Result)
         {
             if (this.onOk)
             {
@@ -107,8 +109,7 @@ public class Result : MonoBehaviour {
         this.fadeOutTimer -= Time.deltaTime;
         if (!this.isStartedFadeOut)
         {
-            string se = "Click";
-            this.seManager.SendMessage("Play", se);
+            this.seManager.SendMessage("Play", SE.SE2);
             this.bgmPlayer.SendMessage("Stop");
             float fadeOutSpeed = 0.7f;
             this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
@@ -131,10 +132,8 @@ public class Result : MonoBehaviour {
             this.fadeInTimer -= Time.deltaTime;
             if (this.fadeInTimer < 0)
             {    
-                string selectBGM = "TITLE";
-                this.bgmPlayer.SendMessage("Play", selectBGM);
-                int phase = 3;
-                this.phaseController.SendMessage("SetPhase", phase);
+                this.bgmPlayer.SendMessage("Play", BGM.BGM6);
+                this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Title);
                 this.fadeOutTimer = this.fadeOutInterval;
                 this.fadeInTimer = this.fadeInInterval;
                 this.onOk = false;

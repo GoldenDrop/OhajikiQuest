@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PhaseControl : MonoBehaviour {
-    int phase = 0;
+    int phase;
     float enemyTime;
     float enemyTimeInterval = 2.5f;
     GameObject magicCircle;
@@ -24,23 +24,23 @@ public class PhaseControl : MonoBehaviour {
         this.gui         = GameObject.FindWithTag("GUI");
         this.turn        = this.gui.transform.Find("BottomBord/TURN");
         this.enemyTime   = this.enemyTimeInterval;
-        SetPhase(3);
+        SetPhase((int)Phase.PresentPhase.Title);
     }
 
-    public void SetPhase(int p)
+    void SetPhase(int p)
     {
         
         this.phase = p;
         switch (this.phase)
         {
-            case 1 :
+            case (int)Phase.PresentPhase.Player:
                 this.playerTurn++;
                 this.totalTurn++;
                 this.turn.SendMessage("UpdteTurn", playerTurn);
                 Debug.Log("playerTurn ++");
                 Debug.Log("totalTurn ++");
                 break;
-            case 2:
+            case (int)Phase.PresentPhase.Enemy:
                 this.enemyTrun++;
                 Debug.Log("enemyTrun ++ : " + this.enemyTrun);
                 break;
@@ -68,7 +68,7 @@ public class PhaseControl : MonoBehaviour {
     void Update()
     {
         //Debug.Log("Now Phase : " + this.phase);
-        if (this.phase == 2)
+        if (this.phase == (int)Phase.PresentPhase.Enemy)
         {
             this.enemyTime -= Time.deltaTime;
             Debug.Log("enemyTime : " + this.enemyTime);

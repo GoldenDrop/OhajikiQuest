@@ -19,12 +19,6 @@ public class PlayerOrb : MonoBehaviour {
     float moveInterval = 3.0f;
     float waitTimer;
     float waitInterval = 1.5f;
-    float angle;
-    public float limitAngle = 30.0f;
-    float minAngle;
-    float maxAngle;
-    public float minLength = 0.5f;
-    public float maxLength = 3.5f;
     Quaternion rotation;
     Transform yusha;
 
@@ -40,8 +34,6 @@ public class PlayerOrb : MonoBehaviour {
 
         this.moveTimer = this.moveInterval;
         this.waitTimer = this.waitInterval;
-        this.minAngle = -90 + limitAngle;
-        this.maxAngle = 90 - limitAngle;
         ChangeTransparency(0);
         this.yusha = gameObject.transform.Find("Yusha");
         
@@ -81,9 +73,7 @@ public class PlayerOrb : MonoBehaviour {
                     {
                         if (!isClear)
                         {
-                            Debug.Log("************************************** Send Phase 2 **********************************");
-                            int sendPhase = 2;
-                            this.phaseController.SendMessage("SetPhase", sendPhase);
+                            this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Enemy);
                         }
                         this.isMoving = false;
                         this.isStoped = false;
@@ -128,8 +118,7 @@ public class PlayerOrb : MonoBehaviour {
         {
             case "Wall":
             case "GUI":
-                string se = "HitWall";
-                this.seManager.SendMessage("Play", se);
+                this.seManager.SendMessage("Play", SE.SE8);
                 break;
         }
     }

@@ -13,7 +13,7 @@ public class GameOver : MonoBehaviour {
 
 
     RaycastHit2D hit;
-    int phase = 0;
+    int phase;
     GetPhase getPhase; // 現行フェイズ取得クラス
     Transform score;
 
@@ -49,7 +49,7 @@ public class GameOver : MonoBehaviour {
 	void Update () 
     {
         this.phase = this.getPhase.GetNowPhase();
-        if (this.phase == 4)
+        if (this.phase == (int)Phase.PresentPhase.GameOver)
         {
             if (this.onRetry)
             {
@@ -83,8 +83,7 @@ public class GameOver : MonoBehaviour {
                                 this.onRetry = true;
                                 break;
                         }
-                        string se = "Click";
-                        this.seManager.SendMessage("Play", se);
+                        this.seManager.SendMessage("Play", SE.SE2);
                     }
                 }
             }
@@ -128,10 +127,8 @@ public class GameOver : MonoBehaviour {
             this.fadeInTimer -= Time.deltaTime;
             if (this.fadeInTimer < 0)
             {
-                string selectBGM = "RESULT";
-                this.bgmPlayer.SendMessage("Play", selectBGM);
-                int phase = 5;
-                this.phaseController.SendMessage("SetPhase", phase);
+                this.bgmPlayer.SendMessage("Play", BGM.BGM7);
+                this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Result);
                 this.fadeOutTimer = this.fadeOutInterval;
                 this.fadeInTimer = this.fadeInInterval;
                 this.onExit = false;
@@ -170,8 +167,7 @@ public class GameOver : MonoBehaviour {
             this.fadeInTimer -= Time.deltaTime;
             if (this.fadeInTimer < 0)
             {
-                int phase = 0;
-                this.phaseController.SendMessage("SetPhase", phase);
+                this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Wait);
                 this.fadeOutTimer = this.fadeOutInterval;
                 this.fadeInTimer = this.fadeInInterval;
                 this.onRetry = false;

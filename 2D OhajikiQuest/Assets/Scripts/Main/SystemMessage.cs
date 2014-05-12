@@ -14,7 +14,6 @@ public class SystemMessage : MonoBehaviour {
 
 
     string messageFlag = "WAIT";
-    string selectBGM = "";
 
     int stageNumber = 1;
     float moveTimer;
@@ -191,8 +190,7 @@ public class SystemMessage : MonoBehaviour {
                     this.moveTimer = this.moveTime;
                     this.fadeOutTimer = this.fadeOutInterval;
                     this.fadeInTimer = this.fadeInInterval;
-                    int phase = 4;
-                    this.phaseController.SendMessage("SetPhase", phase);
+                    this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.GameOver);
                     this.messageFlag = "WAIT";
                 }
             }
@@ -213,12 +211,10 @@ public class SystemMessage : MonoBehaviour {
             this.massageTimer -= Time.deltaTime;
             if (this.massageTimer < 0)
             {
-                string se = "Alert";
-                this.seManager.SendMessage("Play", se);
+                this.seManager.SendMessage("Play", SE.SE1);
                 this.battleObject.transform.localPosition = this.topPoint;
                 this.startObject.transform.localPosition = this.bottomPoint;
-                int phase = 1;
-                this.phaseController.SendMessage("SetPhase", phase);
+                this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Player);
                 this.messageFlag = "WAIT";
                 this.moveTimer = this.moveTime;
                 this.massageTimer = this.massageTime;
@@ -273,15 +269,13 @@ public class SystemMessage : MonoBehaviour {
                 this.fadeInTimer -= Time.deltaTime;
                 if (this.fadeInTimer < 0)
                 {
-                    this.selectBGM = "RESULT";
-                    this.bgmPlayer.SendMessage("Play", this.selectBGM);
+                    this.bgmPlayer.SendMessage("Play", BGM.BGM7);
                     this.isStartedFadeOut = false;
                     this.isStartedFadeIn = false;
                     this.moveTimer = this.moveTime;
                     this.fadeOutTimer = this.fadeOutInterval;
                     this.fadeInTimer = this.fadeInInterval;
-                    int phase = 5;
-                    this.phaseController.SendMessage("SetPhase", phase);
+                    this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Result);
                     this.messageFlag = "WAIT";
                 }
             }
@@ -299,22 +293,22 @@ public class SystemMessage : MonoBehaviour {
         switch (this.messageFlag)
         {
             case "CLEAR":
-                se = "StageClear";
+                se = SE.SE11;
                 volume = 0.05f;
                 break;
 
             case "GAMEOVER":
-                se = "GameOver";
+                se = SE.SE5;
                 volume = 0.05f;
                 break;
 
             case "GAMECLEAR":
-                se = "GameClear";
+                se = SE.SE4;
                 volume = 0.05f;
                 break;   
             case "START":
-                this.selectBGM = SelectStageBGM(this.stageNumber);
-                this.bgmPlayer.SendMessage("Play", this.selectBGM);
+                string selectBGM = SelectStageBGM(this.stageNumber);
+                this.bgmPlayer.SendMessage("Play", selectBGM);
                 volume = 0.2f;
                 break;
         }
@@ -334,16 +328,16 @@ public class SystemMessage : MonoBehaviour {
         switch (stage)
         {
             case 1:
-                bgm = "STAGE1";
+                bgm = BGM.BGM1;
                 break;
             case 2:
-                bgm = "STAGE2";
+                bgm = BGM.BGM2;
                 break;
             case 3:
-                bgm = "STAGE3";
+                bgm = BGM.BGM3;
                 break;
             case 4:
-                bgm = "LASTSTAGE";
+                bgm = BGM.BGM5;
                 break;
         }
 

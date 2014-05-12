@@ -14,7 +14,7 @@ public class Title : MonoBehaviour {
 
     Transform titleText;
     Transform startText;
-    int phase = 0;
+    int phase;
 
     GetPhase getPhase; // 現行フェイズ取得クラス
 
@@ -48,14 +48,13 @@ public class Title : MonoBehaviour {
         this.fadeOutTimer    = this.fadeOutInterval;
         this.fadeInTimer     = this.fadeInInterval;
 
-        string bgm = "TITLE";
-        this.bgmPlayer.SendMessage("Play", bgm);
+        this.bgmPlayer.SendMessage("Play", BGM.BGM6);
 	}
 	
 	void Update () 
     {
         this.phase = this.getPhase.GetNowPhase();
-        if (this.phase == 3) // Titleフェイズなら
+        if (this.phase == (int)Phase.PresentPhase.Title) // Titleフェイズなら
         {
             this.blinkTimer -= Time.deltaTime;
 
@@ -71,8 +70,7 @@ public class Title : MonoBehaviour {
                 this.fadeOutTimer -= Time.deltaTime;
                 if (!this.isStartedFadeOut)
                 {
-                    string se = "TitleClick";
-                    this.seManager.SendMessage("Play", se);
+                    this.seManager.SendMessage("Play", SE.SE12);
                     this.bgmPlayer.SendMessage("Stop");
                     float fadeOutSpeed = 0.7f;
                     this.fadeManager.SendMessage("OnFadeOutFlag", fadeOutSpeed);
@@ -99,8 +97,7 @@ public class Title : MonoBehaviour {
                         this.onClick = false;
                         this.isStartedFadeOut = false;
                         this.isStartedFadeIn = false;
-                        int phase = 0;
-                        this.phaseController.SendMessage("SetPhase", phase);
+                        this.phaseController.SendMessage("SetPhase", (int)Phase.PresentPhase.Wait);
                         string flag = "START";
                         this.systemMessage.SendMessage("OnFlag", flag);
                     }

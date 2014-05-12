@@ -17,7 +17,7 @@ public class EnemyMove : MonoBehaviour {
     {
         this.phase = this.getPhase.GetNowPhase();
         
-        if (this.phase == 2) // 敵フェイズ
+        if (this.phase == (int)Phase.PresentPhase.Enemy) // 敵フェイズ
         {
             this.turnNumber = this.getPhase.GetTrunNumber("Enemy");
             if (this.turnNumber % this.moveInterval == 0)

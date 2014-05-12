@@ -1,24 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SE : MonoBehaviour {
+public class SEManager : MonoBehaviour {
 
     AudioClip audioClip;
     AudioSource audioSource;
-    string path = "SE/";
+    const string PATH = "SE/";
 
-	void Start () 
+    void Start()
     {
         this.audioSource = GetComponent<AudioSource>();
-	}
-	
-	
+    }
+
+
     void Play(string selectSE)
     {
         Debug.Log("Selected : " + selectSE);
-        string sePath = this.path + selectSE;
+        string sePath = PATH + selectSE;
         this.audioClip = Resources.Load(sePath) as AudioClip;
-        audioSource.clip = audioClip;
-        audioSource.PlayOneShot(audioClip);
+        this.audioSource.clip = this.audioClip;
+        audioSource.PlayOneShot(this.audioClip);
     }
 }

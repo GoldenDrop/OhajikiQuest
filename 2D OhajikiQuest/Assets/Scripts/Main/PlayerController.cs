@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         this.phase = this.getPhase.GetNowPhase();
-        if (this.phase == 1) //Playerフェイズ
+        if (this.phase == (int)Phase.PresentPhase.Player) //Playerフェイズ
         {
             if (!this.isMoving) // Playerが動いてないなら
             {
@@ -123,8 +123,7 @@ public class PlayerController : MonoBehaviour {
             this.isPulled = false;
             this.isMoving = true;
             // SE開始
-            string se = "Go";
-            this.seManager.SendMessage("Play", se);
+            this.seManager.SendMessage("Play", SE.SE6);
             float infoAlpha = 0;
             this.infomation.SendMessage("ChangeTransparency", infoAlpha);
             
