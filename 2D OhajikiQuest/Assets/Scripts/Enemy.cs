@@ -46,11 +46,9 @@ public class Enemy : MonoBehaviour {
     void ReceivedDamage()
     {
         GameObject effect = null;
-        string se = "";
         if (this.hp > 0)
         {
             effect = this.hitPrefab;
-            se = "Hit1";
             --this.hp;
             float n = this.hp / this.maxHP;
             this.hpBarRed.localScale = new Vector3(this.hpBarFirstScale.x * (this.hp / this.maxHP), this.hpBarFirstScale.y, this.hpBarFirstScale.z);
@@ -60,15 +58,12 @@ public class Enemy : MonoBehaviour {
         if (this.hp == 0)
         {
             effect = this.explosionPrefab;
-            se = "Explosion1";
             Destroy(gameObject);
-            //this.player.SendMessage("OnClearFlag");
             this.gameController.SendMessage("UpdateEnemyCount");
             this.score.SendMessage("UpdateScore", this.point);
         }
 
         Instantiate(effect, transform.position, Quaternion.identity);
-        this.seManager.SendMessage("Play", se);
     }
 
     void OnCollisionEnter2D(Collision2D hit)
