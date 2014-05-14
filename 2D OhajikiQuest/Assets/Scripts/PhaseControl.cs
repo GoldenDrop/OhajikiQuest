@@ -78,6 +78,7 @@ public class PhaseControl : MonoBehaviour {
                 SetPhase(1);
                 this.enemyTime = this.enemyTimeInterval;
             }
+
         }   
     }
 
